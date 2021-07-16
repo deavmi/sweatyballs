@@ -1,6 +1,7 @@
 module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
+import libsweatyballs.security.identity : Identity;
 
 /**
 * Router
@@ -14,7 +15,7 @@ public final class Router
     */
     private Link[] links;
 
-    this()
+    this(Identity identity, Link[] links)
     {
 
     }
