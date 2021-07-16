@@ -2,7 +2,7 @@ module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
-import core.threading : Thread;
+import core.thread : Thread;
 
 /**
 * Router

@@ -1,6 +1,6 @@
 module libsweatyballs.zwitch.core;
 
-import core.threading : Thread;
+import core.thread : Thread;
 
 /**
 * Switch
