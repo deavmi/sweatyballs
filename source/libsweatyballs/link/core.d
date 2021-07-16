@@ -1,6 +1,6 @@
 module libsweatyballs.link.core;
 
-import libsweatyballs.link.message : Message;
+import libsweatyballs.link.message.core : Message;
 import core.sync.mutex : Mutex;
 
 /**
