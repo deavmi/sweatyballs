@@ -29,14 +29,22 @@ public final class Identity
     /**
     * Generates a fingerprint of the public key
     *
-    * This will run SHA (TODO)
+    * This will run SHA512 on the public key
     */
     public static string generateFingerprint(RSAKeyPair keys)
     {
+        /* Generated fingerprint */
         string fingerprint;
 
         /* TODO: Validate keys */
         validateKeys(keys);
+
+        /* SHA-512 the public key */
+        import std.digest.sha;
+        byte[] dataIn = [1,2];
+        ubyte[] shaBytes = sha512Of(keys.publicKey);
+        fingerprint = toHexString(shaBytes);
+
 
         /* TODO: Return fingerprint */
         return fingerprint;
