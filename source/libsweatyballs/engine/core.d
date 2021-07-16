@@ -46,11 +46,11 @@ public final class Engine
 
         /* Setup a new Router */
         router = new Router(config.routerIdentity, config.links);
-        router.launch();
+        
 
         /* Setup a new Switch */
         zwitch = new Switch(router);
-        zwitch.launch();
+        
     }
 
     private void setupLinks(Link[] links)
@@ -67,8 +67,10 @@ public final class Engine
     public void launch()
     {
         /* Start router */
+        router.launch();
 
         /* Start switch */
+        zwitch.launch();
 
         /* Start collector */
 
