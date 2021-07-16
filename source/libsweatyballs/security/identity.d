@@ -10,7 +10,7 @@ import crypto.rsa : RSAKeyPair, RSA;
 public final class Identity
 {
     /**
-    * Roiter identity
+    * Router identity
     */
     private RSAKeyPair rsaKeys;
     private string fingerprint;
@@ -18,12 +18,12 @@ public final class Identity
     this(RSAKeyPair keys)
     {
         /* ToDO: Validate keys */
-        validateKeys();
+        validateKeys(keys);
 
-        this.rsakeys = keys;
+        this.rsaKeys = keys;
 
         /* Generate fingerprint */
-        fingerprint = generateFingerprint();
+        fingerprint = generateFingerprint(rsaKeys);
     }
 
     public static string generateFingerprint(RSAKeyPair keys)
@@ -37,6 +37,7 @@ public final class Identity
     private void validateKeys(RSAKeyPair keys)
     {
         /* TODO: make sure non-empty and that they are related */
+
     }
 
 
