@@ -9,8 +9,31 @@ module libsweatyballs.link.core;
 */
 public final class Link
 {
+    /**
+    * In and out queues
+    */
+    private Message[] inQueue;
+    private Message[] outQueue;
+
     this(string interfaceName)
     {
-        
+
+    }
+
+    /**
+    * Blocks to receive one message from the incoming queue
+    */
+    public Message receive()
+    {
+        /* TODO: Implement me */
+        return null;
+    }
+
+    /**
+    * Sends a message
+    */
+    public void send(Message message, string recipient)
+    {
+        /* TODO: Implement me */
     }
 }
