@@ -60,12 +60,13 @@ public final class Advertiser : Thread
         byte[] message = [65,66,66,65,65,66,66,65,65,66,66,65];
 
         /* Encode using bformat */
-        byte[] buff = encodeBformat(buff);
+        /* TODO: UDP, so actually remove this */
+        byte[] buff = encodeBformat(message);
 
 
 
         gprintln("Bruh"~link.getInterface());
-        ulong stats = socket.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
+        ulong stats = socket.sendTo(message, parseAddress("ff02::1%"~link.getInterface(), 6666));
         socket.close();
 
         import std.conv : to;
