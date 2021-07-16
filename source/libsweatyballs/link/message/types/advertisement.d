@@ -13,6 +13,12 @@ public final class Advertisement : Message
     /* TODO: Fix this (this is just to get compilation to work) */
     this()
     {
-        super(null);
+        super(new byte[1]);
+    }
+
+    /* TODO: Fix this (this is just to get compilation to work) */
+    this()
+    {
+        super("");
     }
 }
