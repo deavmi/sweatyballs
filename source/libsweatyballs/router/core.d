@@ -38,10 +38,10 @@ public final class Router : Thread
     */
     private void initMutexes()
     {
-        linksMutex = new Mute();
+        linksMutex = new Mutex();
     }
 
-    private void initializeAdvertiser()
+    private void initAdvertiser()
     {
         advertiser = new Advertiser(this);
     }
