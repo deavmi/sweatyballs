@@ -1,4 +1,4 @@
-module libsweatyballs.link.message;
+module libsweatyballs.link.message.core;
 
 /**
 * Message
