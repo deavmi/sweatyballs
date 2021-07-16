@@ -1,0 +1,20 @@
+// Advertisement message
+//
+// This is a ProtocolBuffer descriptor for router advertisement
+// messages.
+
+// Set the version of ProtocolBuffer
+syntax="proto3";
+
+message AdvertisementMessage
+{
+    // The routes in this advertisement
+    repeated RouteEntry routes = 1;
+}
+
+
+message RouteEntry
+{
+    // Address this is a route to
+    string address = 1;
+}
