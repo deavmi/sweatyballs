@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/sweatyballs
+sweatyballs.so
+sweatyballs.dylib
+sweatyballs.dll
+sweatyballs.a
+sweatyballs.lib
+sweatyballs-test-*
+*.exe
+*.o
+*.obj
+*.lst
