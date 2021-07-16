@@ -26,6 +26,12 @@ message SessionMessage
     bytes payload = 3;
 }
 
+message DataMessage
+{
+    //DataMessage
+    bytes data;
+}
+
 message NewSessionMessage
 {
     //TODO: Change to some number type
