@@ -1,0 +1,45 @@
+// Session message
+//
+// This is a ProtocolBuffer descriptor for a session message.
+
+// Set the version of ProtocolBuffer
+syntax="proto3";
+
+//Session types
+//
+// Several session message types are available
+enum SessionType
+{
+    NEW_SESSION = 0;
+    SEND_DATA = 1;
+    CLOSE_SESSION = 2;
+    SESSION_ACK = 3;
+}
+
+message SessionMessage
+{
+    // Message destination
+    string toPublicKey = 1;
+
+    //SessionMessage details
+    SessionType type = 2;
+    bytes payload = 3;
+}
+
+message NewSessionMessage
+{
+    //TODO: Change to some number type
+    string aesKey = 1;
+}
+
+message SessionAcknowledgement
+{
+    //TODO: Status as uint or something
+    string status = 1;
+    string sessionID = 2; //TODO: Could be made a number too
+}
+
+message CloseSessionMessage
+{
+    string sessionID = 1;
+}
