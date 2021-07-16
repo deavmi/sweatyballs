@@ -10,5 +10,9 @@ import libsweatyballs.link.message.core : Message;
 */
 public final class DataPacket : Message
 {
-
+    /* TODO: Fix this (this is just to get compilation to work) */
+    this()
+    {
+        super(null);
+    }
 }
