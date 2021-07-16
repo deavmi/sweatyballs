@@ -1,13 +1,13 @@
 module sweatyballs.main;
 
-import std.stdio;
+import gogga;
 import libsweatyballs.engine.configuration : Config;
 import libsweatyballs.security.identity : Identity;
 import libsweatyballs.engine.core : Engine;
 
 void main()
 {
-	writeln("Welcome to sweatyballs");
+	gprintln("Welcome to sweatyballs");
 
 	/* TODO: Add command-line parsing here with jcli */
 
