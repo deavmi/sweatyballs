@@ -29,6 +29,8 @@ public final class Router : Thread
         /* Initialize locks */
         initMutexes();
 
+        this.links = links;
+
         /* Initialize the advertiser */
         initAdvertiser();
     }
@@ -53,6 +55,20 @@ public final class Router : Thread
         {
             /* TODO: Cycle through each with timeout wait */
         }
+    }
+
+    public Link[] getLinks()
+    {
+        Link[] copy;
+
+        linksMutex.lock();
+        foreach(Link link; links)
+        {
+            copy ~= link;
+        }
+        linksMutex.unlock();
+
+        return copy;
     }
 
     public void launch()
