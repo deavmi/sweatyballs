@@ -2,6 +2,7 @@ module libsweatyballs.link.core;
 
 import libsweatyballs.link.message.core : Message;
 import core.sync.mutex : Mutex;
+import core.thread : Thread;
 
 /**
 * Link
@@ -12,7 +13,7 @@ import core.sync.mutex : Mutex;
 *
 * This class handles the Message queues for sending and receiving messages (and partially decoding them)
 */
-public final class Link
+public final class Link : Thread
 {
     /**
     * In and out queues
@@ -24,6 +25,9 @@ public final class Link
 
     this(string interfaceName)
     {
+        /* Set the thread's worker function */
+        super(&worker);
+
         /* Initialize locks */
         initMutexes();
     }
@@ -37,7 +41,19 @@ public final class Link
         outQueueLock = new Mutex();
     }
 
+    private void worker()
+    {
+        /* TODO: Implement me */
+        while(true)
+        {
 
+        }
+    }
+
+    public void launch()
+    {
+        start();
+    }
 
     /**
     * Blocks to receive one message from the incoming queue
