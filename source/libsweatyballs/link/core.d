@@ -81,7 +81,8 @@ public final class Link : Thread
             flags |= MSG_TRUNC;
             flags |= MSG_PEEK;
 
-            byte[12] data;
+            byte[] data;
+            data.length = 1;
             Address address;
             gprintln("Awaiting message...");
             long len = socket.receiveFrom(data, flags, address);
@@ -93,7 +94,7 @@ public final class Link : Thread
             else
             {
                 data.length = len;
-                socket.receiveFrom(data, flags, address);
+                socket.receiveFrom(data, address);
 
                 gprintln("Received data: "~to!(string)(data));
                 gprintln("Message from: "~to!(string)(address));
