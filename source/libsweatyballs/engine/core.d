@@ -1,5 +1,10 @@
 module libsweatyballs.engine.core;
 
+import libsweatyballs.router.core : Router;
+import libsweatyballs.zwitch.core : Switch;
+
+/* TODO: Import for config thing */
+
 /**
 * Engine
 *
@@ -7,6 +12,12 @@ module libsweatyballs.engine.core;
 */
 public final class Engine
 {
+    /**
+    * Network components
+    */
+    private Router router;
+    private Switch zwitch;
+
     /**
     * 1. This must read config given to it
     * 2. Setups links
@@ -16,4 +27,8 @@ public final class Engine
     * 6. Start the switch
     * 7. We must then mainloop and collect statistics and handle shutdown etc
     */
+    this()
+    {
+        /* TODO: Read config */
+    }
 }
