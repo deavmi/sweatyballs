@@ -6,6 +6,7 @@ import libsweatyballs.link.core : Link;
 import std.socket;
 import gogga;
 import std.conv : to;
+import bmessage;
 
 public final class Advertiser : Thread
 {
@@ -56,7 +57,13 @@ public final class Advertiser : Thread
     {
         /* TODO: Add error handling */
         Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        byte[] buff = [65,66,66,65,65,66,66,65,65,66,66,65];
+        byte[] message = [65,66,66,65,65,66,66,65,65,66,66,65];
+
+        /* Encode using bformat */
+        byte[] buff = encodeBformat(buff);
+
+
+
         gprintln("Bruh"~link.getInterface());
         ulong stats = socket.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
         socket.close();
