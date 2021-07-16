@@ -5,6 +5,7 @@ import libsweatyballs.router.core : Router;
 import libsweatyballs.link.core : Link;
 import std.socket;
 import gogga;
+import std.conv : to;
 
 public final class Advertiser : Thread
 {
@@ -26,10 +27,13 @@ public final class Advertiser : Thread
             /* TODO: Cycle through each link and advertise on them */
             /* TODO: Fetch links safely */
             Link[] links = router.getLinks();
+            gprintln("Advertiser: "~to!(string)(links));
             foreach(Link link; links)
             {
                 advertise(link);
             }
+
+            gprintln("Advertiser: "~to!(string)(links));
 
             sleep(dur!("seconds")(1));
         }
@@ -45,13 +49,16 @@ public final class Advertiser : Thread
     *
     * The multicast address used is `ff69::1` because the
     * sex number is cool and I am a 22 year old virgin
+    *
+    * TODO: Enqueue this somehow onto Link's sendqueue?
     */
     private void advertise(Link link)
     {
         /* TODO: Add error handling */
         Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
         byte[] buff = [65,66,66,65,65,66,66,65,65,66,66,65];
-        ulong stats = socket.sendTo(buff, parseAddress("ff69::1%"~link.getInterface(), 6666));
+        gprintln("Bruh"~link.getInterface());
+        ulong stats = socket.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
         socket.close();
 
         import std.conv : to;
