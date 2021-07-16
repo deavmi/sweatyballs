@@ -10,7 +10,7 @@ void main(string[] args)
 {
 	gprintln("Welcome to sweatyballs");
 
-	string interfaceNae = args[1];
+	string interfaceName = args[1];
 
 	/* TODO: Add command-line parsing here with jcli */
 
