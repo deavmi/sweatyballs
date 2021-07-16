@@ -21,8 +21,8 @@ void main()
 
 	/* Create some Links */
 	Link[] links;
-	links ~= new Link("interface1");
-	links ~= new Link("interface2");
+	links ~= new Link("enp0s20f0u1");
+	//links ~= new Link("interface2");
 	config.links = links;
 
 	/* Create a new Engine */
