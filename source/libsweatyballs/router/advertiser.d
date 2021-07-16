@@ -66,7 +66,7 @@ public final class Advertiser : Thread
 
 
         gprintln("Bruh"~link.getInterface());
-        ulong stats = socket.sendTo(message, parseAddress("ff02::1%"~link.getInterface(), 6666));
+        ulong stats = socket.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
         socket.close();
 
         import std.conv : to;
