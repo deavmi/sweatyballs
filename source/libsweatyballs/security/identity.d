@@ -5,7 +5,7 @@ import crypto.rsa : RSAKeyPair, RSA;
 /**
 * Identity
 *
-* Description: represents a router's identity
+* Description: Represents this router's identity
 */
 public final class Identity
 {
