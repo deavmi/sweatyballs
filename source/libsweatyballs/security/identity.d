@@ -1,6 +1,6 @@
 module libsweatyballs.security.identity;
 
-import crypto;
+import crypto.rsa : RSAKeypair;
 
 /**
 * Identity
@@ -9,6 +9,11 @@ import crypto;
 */
 public final class Identity
 {
+    /**
+    * RSA asymetric keys
+    */
+    private RSAKeyPair rsaKeys;
+
     this()
     {
 
