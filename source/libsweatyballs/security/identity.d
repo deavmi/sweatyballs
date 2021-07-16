@@ -94,5 +94,5 @@ unittest
 
     writeln(identity);
     writeln(identity.getFingerprint());
-    writeln(identity.geKeys());
+    writeln(identity.getKeys());
 }
