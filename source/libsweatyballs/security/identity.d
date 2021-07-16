@@ -1,6 +1,6 @@
 module libsweatyballs.security.identity;
 
-import crypto.rsa : RSAKeypair, RSA;
+import crypto.rsa : RSAKeyPair, RSA;
 
 /**
 * Identity
