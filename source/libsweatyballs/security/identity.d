@@ -29,7 +29,7 @@ public final class Identity
     public static string generateFingerprint(RSAKeyPair keys)
     {
         string fingerprint;
-        
+
         /* TODO: Return fingerprint */
         return fingerprint;
     }
@@ -65,5 +65,5 @@ unittest
 {
     Identity identity;
 
-    identity = Identity.newIdentity(uint 1024);
+    identity = Identity.newIdentity(1024);
 }
