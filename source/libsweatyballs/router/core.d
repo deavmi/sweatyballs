@@ -4,6 +4,7 @@ import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
 import core.thread : Thread;
 import core.sync.mutex : Mutex;
+import libsweatyballs.router.advertiser : Advertiser;
 
 /**
 * Router
