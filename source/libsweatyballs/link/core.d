@@ -71,12 +71,34 @@ public final class Link : Thread
 
         while(true)
         {
+
+            /**
+            * MSG_PEEK, we don't want to dequeue this message yet but need to call receive
+            * MSG_TRUNC, return the number of bytes of the datagram even when
+            * bigger than passed in array
+            */
+            SocketFlags flags;
+            flags |= MSG_TRUNC;
+            flags |= MSG_PEEK;
+
             byte[12] data;
             Address address;
             gprintln("Awaiting message...");
-            socket.receiveFrom(data, address);
-            gprintln("Received data: "~to!(string)(data));
-            gprintln("Message from: "~to!(string)(address));
+            long len = socket.receiveFrom(data, flags, address);
+
+            if(len <= 0)
+            {
+                /* TODO: Error handling */
+            }
+            else
+            {
+                data.length = len;
+                socket.receiveFrom(data, flags, address);
+
+                gprintln("Received data: "~to!(string)(data));
+                gprintln("Message from: "~to!(string)(address));
+            }
+            
         }
     }
 
