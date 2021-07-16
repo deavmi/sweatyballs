@@ -3,6 +3,11 @@
 		"Tristan B. Kildaire"
 	],
 	"copyright": "Copyright © 2021, Tristan B. Kildaire",
+	"dependencies": {
+		"bformat": "~>3.1.0",
+		"crypto": "~>0.2.16",
+		"protobuf": "~>0.6.2"
+	},
 	"description": "Next-hop routing with crypto",
 	"license": "GPLv3",
 	"name": "sweatyballs"
