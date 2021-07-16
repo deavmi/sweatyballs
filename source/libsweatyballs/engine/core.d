@@ -3,6 +3,7 @@ module libsweatyballs.engine.core;
 import libsweatyballs.router.core : Router;
 import libsweatyballs.zwitch.core : Switch;
 import libsweatyballs.engine.configuration : Config;
+import std.stdio : writeln;
 
 /* TODO: Import for config thing */
 
@@ -34,8 +35,21 @@ public final class Engine
         parseConfig(config);
     }
 
-    private void config(Config config)
+    private void parseConfig(Config config)
     {
+        /* TODO: Set configuration parameter */
+    }
 
+    public void launch()
+    {
+        /* Start router */
+
+        /* Start switch */
+
+        /* Start collector */
+
+        writeln("Engine has started all threads and is now going to finish and return to constructor thread control");
+        
+        /* TODO: Maybe create Engine thread or all user to do that */
     }
 }
