@@ -6,6 +6,7 @@ import core.thread : Thread;
 import bmessage;
 import std.socket;
 import gogga;
+import std.conv : to;
 
 /**
 * Link
