@@ -64,16 +64,18 @@ public final class Link : Thread
 
         /* Create a Socket for (TODO) */
         Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        // socket.bind();
-        // socket.listen(0);
+
+        /* Listen on the multicast address on port 6666 */
+        socket.bind(parseAddress("ff02::1%"~getInterface(), 6666));
 
         while(true)
         {
             byte[12] data;
-            Address address = parseAddress("ff02::1%"~getInterface(), 6666);
-            gprintln("Poes");
+            Address address;
+            gprintln("Awaiting message...");
             socket.receiveFrom(data, address);
-            gprintln(data);
+            gprintln("Received data: "~to!(string)(data));
+            gprintln("Message from: "~to!(string)(address));
         }
     }
 
