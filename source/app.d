@@ -2,6 +2,7 @@ module sweatyballs.main;
 
 import std.stdio;
 import libsweatyballs.engine.configuration : Config;
+import libsweatyballs.security.identity : Identity;
 import libsweatyballs.engine.core : Engine;
 
 void main()
