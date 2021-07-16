@@ -5,10 +5,14 @@ module libsweatyballs.link.message.core;
 *
 * base class for encoding/decoding messages
 */
+
+/* TODO: Remove this (this is just to get this to compile) */
+alias ProtoBuf = string;
+
 public class Message
 {
     /* TODO: Variable for the protocol buffer */
-    private Protokak message;
+    private ProtoBuf message;
     private byte[] messageBytes;
 
     /**
@@ -38,7 +42,7 @@ public class Message
 
     }
 
-    public ProtoKak getMessage()
+    public ProtoBuf getMessage()
     {
         return message;
     }
