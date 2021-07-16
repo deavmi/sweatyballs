@@ -1,5 +1,7 @@
 module libsweatyballs.link.core;
 
+import libsweatyballs.link.message : Message;
+
 /**
 * Link
 *
