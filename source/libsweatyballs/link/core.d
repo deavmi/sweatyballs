@@ -3,6 +3,7 @@ module libsweatyballs.link.core;
 import libsweatyballs.link.message.core : Message;
 import core.sync.mutex : Mutex;
 import core.thread : Thread;
+import bmessage;
 
 /**
 * Link
