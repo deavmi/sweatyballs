@@ -25,16 +25,13 @@ public final class Advertiser : Thread
         /* TODO: Implement me */
         while(true)
         {
-            /* TODO: Cycle through each link and advertise on them */
-            /* TODO: Fetch links safely */
+            /*  Cycle through each link and advertise on them */
             Link[] links = router.getLinks();
-            gprintln("Advertiser: "~to!(string)(links));
             foreach(Link link; links)
             {
+                gprintln("Sending advertisement on "~to!(string)(link)~" ...");
                 advertise(link);
             }
-
-            gprintln("Advertiser: "~to!(string)(links));
 
             sleep(dur!("seconds")(1));
         }
