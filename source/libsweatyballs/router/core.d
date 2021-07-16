@@ -1,5 +1,7 @@
 module libsweatyballs.router.core;
 
+import libsweatyballs.link.core : Link;
+
 /**
 * Router
 *
@@ -7,5 +9,13 @@ module libsweatyballs.router.core;
 */
 public final class Router
 {
-    
+    /**
+    * Links the router can advertise over
+    */
+    private Link[] links;
+
+    this()
+    {
+
+    }
 }
