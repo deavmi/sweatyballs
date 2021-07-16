@@ -4,6 +4,7 @@ import libsweatyballs.router.core : Router;
 import libsweatyballs.zwitch.core : Switch;
 import libsweatyballs.engine.configuration : Config;
 import libsweatyballs.link.core : Link;
+import std.conv : to;
 import gogga;
 
 /* TODO: Import for config thing */
