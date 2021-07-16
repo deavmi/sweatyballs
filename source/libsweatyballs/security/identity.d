@@ -26,18 +26,26 @@ public final class Identity
         fingerprint = generateFingerprint(rsaKeys);
     }
 
+    /**
+    * Generates a fingerprint of the public key
+    *
+    * This will run SHA (TODO)
+    */
     public static string generateFingerprint(RSAKeyPair keys)
     {
         string fingerprint;
+
+        /* TODO: Validate keys */
+        validateKeys(keys);
 
         /* TODO: Return fingerprint */
         return fingerprint;
     }
 
-    private void validateKeys(RSAKeyPair keys)
+    public static bool validateKeys(RSAKeyPair keys)
     {
         /* TODO: make sure non-empty and that they are related */
-
+        return true;
     }
 
 
@@ -56,15 +64,35 @@ public final class Identity
         /* Create new RSA keys */
         RSAKeyPair rsaKeys = RSA.generateKeyPair(rsaBitLength);
 
-        /* TODO: Create a public key fingerprint */
+        /* Create the Identity with the given keypair */
+        identity = new Identity(rsaKeys);
 
         return identity;
+    }
+
+    public RSAKeyPair getKeys()
+    {
+        return rsaKeys;
+    }
+
+    public string getFingerprint()
+    {
+        return fingerprint;
+    }
+
+    public override string toString()
+    {
+        return "Identity "~fingerprint~")";
     }
 }
 
 unittest
 {
-    Identity identity;
+    import std.stdio;
 
-    identity = Identity.newIdentity(1024);
+    Identity identity = Identity.newIdentity(1024);
+
+    writeln(identity);
+    writeln(identity.getFingerprint());
+    writeln(identity.geKeys());
 }
