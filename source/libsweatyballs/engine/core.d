@@ -38,6 +38,20 @@ public final class Engine
     private void parseConfig(Config config)
     {
         /* TODO: Set configuration parameter */
+
+        /* Setup links */
+        setupLinks(config.links);
+    }
+
+    private void setupLinks(Link[] links)
+    {
+        gprintln("Begin link initailization");
+        foreach(Link link; links)
+        {
+            gprintln("Initializing link "~to!(string)(link)~" ...");
+            link.launch();
+        }
+        gprintln("Links have been initialized");
     }
 
     public void launch()
