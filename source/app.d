@@ -1,3 +1,5 @@
+module sweatyballs.main;
+
 import std.stdio;
 
 void main()
