@@ -18,6 +18,8 @@ public final class Router : Thread
     private Link[] links;
     private Mutex linksMutex;
 
+    private Advertiser advertiser;
+
     this(Identity identity, Link[] links)
     {
         /* Set the thread's worker function */
@@ -25,6 +27,9 @@ public final class Router : Thread
 
         /* Initialize locks */
         initMutexes();
+
+        /* Initialize the advertiser */
+        initAdvertiser();
     }
 
     /**
@@ -33,6 +38,11 @@ public final class Router : Thread
     private void initMutexes()
     {
         linksMutex = new Mute();
+    }
+
+    private void initializeAdvertiser()
+    {
+        advertiser = new Advertiser(this);
     }
 
     private void worker()
@@ -47,5 +57,8 @@ public final class Router : Thread
     public void launch()
     {
         start();
+
+        /* Launch the routes advertiser */
+        advertiser.launch();
     }
 }
