@@ -6,9 +6,11 @@ import libsweatyballs.security.identity : Identity;
 import libsweatyballs.link.core : Link;
 import libsweatyballs.engine.core : Engine;
 
-void main()
+void main(string[] args)
 {
 	gprintln("Welcome to sweatyballs");
+
+	string interfaceNae = args[1];
 
 	/* TODO: Add command-line parsing here with jcli */
 
@@ -21,7 +23,7 @@ void main()
 
 	/* Create some Links */
 	Link[] links;
-	links ~= new Link("enp0s20f0u1");
+	links ~= new Link(interfaceName);
 	//links ~= new Link("interface2");
 	config.links = links;
 
