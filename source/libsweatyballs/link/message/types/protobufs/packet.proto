@@ -1,0 +1,32 @@
+// Packet message
+//
+// This is a ProtocolBuffer descriptor for data packet.
+
+// Set the version of ProtocolBuffer
+syntax="proto3";
+
+//MessageType
+enum MessageType
+{
+    SESSION = 0;
+    ADVERTISEMENT = 1;
+}
+
+// Message
+//
+// This describes a general message that has a from address
+// (the public key), an associated signature computed by
+// the sender (to prove the message is from `publicKey`).
+//
+// The message `type` and data `payload` are the last details.
+message Message
+{
+    // Cryptographic details
+    string publicKey = 1;
+    string signature = 2;
+
+    //Message details
+    MessageType type = 3;
+    bytes payload = 4;
+}
+
