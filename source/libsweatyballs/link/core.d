@@ -4,6 +4,8 @@ import libsweatyballs.link.message.core : Message;
 import core.sync.mutex : Mutex;
 import core.thread : Thread;
 import bmessage;
+import std.socket;
+import gogga;
 
 /**
 * Link
@@ -24,13 +26,22 @@ public final class Link : Thread
     private Mutex inQueueLock;
     private Mutex outQueueLock;
 
+    private string interfaceName;
+
     this(string interfaceName)
     {
         /* Set the thread's worker function */
         super(&worker);
 
+        this.interfaceName = interfaceName;
+
         /* Initialize locks */
         initMutexes();
+    }
+
+    public string getInterface()
+    {
+        return interfaceName;
     }
 
     /**
@@ -42,12 +53,27 @@ public final class Link : Thread
         outQueueLock = new Mutex();
     }
 
+    /**
+    * Listens for advertisements
+    */
     private void worker()
     {
         /* TODO: Implement me */
+        
+        /* TODO: Make whatever this class is used for more specific */
+
+        /* Create a Socket for (TODO) */
+        Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+        // socket.bind();
+        // socket.listen(0);
+
         while(true)
         {
-
+            byte[12] data;
+            Address address = parseAddress("ff02::1%"~getInterface(), 6666);
+            gprintln("Poes");
+            socket.receiveFrom(data, address);
+            gprintln(data);
         }
     }
 
