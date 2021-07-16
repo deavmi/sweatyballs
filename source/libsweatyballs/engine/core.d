@@ -41,6 +41,10 @@ public final class Engine
 
         /* Setup links */
         setupLinks(config.links);
+
+        /* Setup a new Router */
+        router = new Router(config.routerIdentity, config.links);
+        router.launch();
     }
 
     private void setupLinks(Link[] links)
