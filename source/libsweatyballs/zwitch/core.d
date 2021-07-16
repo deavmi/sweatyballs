@@ -1,5 +1,6 @@
 module libsweatyballs.zwitch.core;
 
+import libsweatyballs.router.core : Router;
 import core.thread : Thread;
 
 /**
