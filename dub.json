@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Tristan B. Kildaire"
+	],
+	"copyright": "Copyright © 2021, Tristan B. Kildaire",
+	"description": "Next-hop routing with crypto",
+	"license": "GPLv3",
+	"name": "sweatyballs"
+}
