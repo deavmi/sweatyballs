@@ -18,12 +18,10 @@ import std.conv : to;
 */
 public final class Router : Thread
 {
-    
-    private Advertiser advertiser;
-
     private Identity identity;
-
     private Table routingTable;
+
+    private Advertiser advertiser;
 
     private Engine engine;
 
