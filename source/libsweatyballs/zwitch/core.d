@@ -49,7 +49,8 @@ public final class Switch : Thread
     /* TODO: Move this elsewhere */
     public class Session
     {
-
+        private string aesKey;
+        private string sessionID;
     }
 
     private Session fetchSession(string address)
