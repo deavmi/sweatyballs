@@ -19,7 +19,7 @@ public final class Switch : Thread
         /* Set the thread's worker function */
         super(&worker);
 
-        this.engine = v;
+        this.engine = engine;
     }
 
     private void worker()
