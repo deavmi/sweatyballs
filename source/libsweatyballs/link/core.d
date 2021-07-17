@@ -82,7 +82,7 @@ public final class Link : Thread
 
         /* Setup the router-to-router socket (bound to ::) port 6667 */
         r2rSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        //r2rSock.bind(parseAddress("::", 6667));
+        r2rSock.bind(parseAddress("::", 6667));
     }
 
     /**
@@ -160,6 +160,9 @@ public final class Link : Thread
         {
             advertisement.AdvertisementMessage advMsg = fromProtobuf!(advertisement.AdvertisementMessage)(msgPayload);
 
+            /* Get the router-to-router port for router who sent the advertisement */
+            ushort r2rPort = to!(ushort)(advMsg.r2rPort);
+
             /* Get the routes being advertised */
             RouteEntry[] routes = advMsg.routes;
             gprintln("Total of "~to!(string)(routes.length)~" received");
@@ -169,7 +172,11 @@ public final class Link : Thread
             /* Add each route to the routing table */
             foreach(RouteEntry route; routes)
             {
-                Route newRoute = new Route(route.address, sender);
+                /* Create a new Address(routerAddr, r2rPort) */
+                Address nexthop = parseAddress(sender.toAddrString(), r2rPort);
+
+                /* Create a new route with `nexthop` as the nexthop address */
+                Route newRoute = new Route(route.address, nexthop);
                 engine.getRouter().getTable().addRoute(newRoute);
                 gprintln("Added route "~to!(string)(newRoute));
             }
