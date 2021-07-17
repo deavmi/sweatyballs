@@ -79,9 +79,16 @@ public final class Advertiser : Thread
         entries ~= entry;
         d.routes = entries;
 
-        /* Encode using bformat */
-        /* TODO: UDP, so actually remove this */
-        byte[] buff = encodeBformat(cast(byte[])array(toProtobuf(d)));
+
+        /* Create Message */
+        packet.Message message = new packet.Message();
+        message.publicKey = router.getIdentity().getPublicKey();
+        message.signature = "TODO";
+        message.type = pacjet.MessageType.ADVERTISEMENT;
+        message.payload = array(toProtobuf(d));
+
+        /* Encode the Message */
+        byte[] buff = cast(byte[])array(toProtobuf(message));
 
         ulong stats = mcastSock.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
 
