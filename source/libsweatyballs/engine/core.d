@@ -23,6 +23,12 @@ public final class Engine
     private Switch zwitch;
 
     /**
+    * Links the router can advertise over
+    */
+    private Link[] links;
+    private Mutex linksMutex;
+
+    /**
     * 1. This must read config given to it
     * 2. Setups links
     * 3. Create new Router with these links
@@ -35,6 +41,31 @@ public final class Engine
     {
         /* TODO: Read config */
         parseConfig(config);
+
+        /* Initialize locks */
+        initMutexes();
+    }
+
+    /**
+    * Initializes all the mutexes
+    */
+    private void initMutexes()
+    {
+        linksMutex = new Mutex();
+    }
+
+    public Link[] getLinks()
+    {
+        Link[] copy;
+
+        linksMutex.lock();
+        foreach(Link link; links)
+        {
+            copy ~= link;
+        }
+        linksMutex.unlock();
+
+        return copy;
     }
 
     private void parseConfig(Config config)
@@ -45,7 +76,7 @@ public final class Engine
         setupLinks(config.links);
 
         /* Setup a new Router */
-        router = new Router(config.routerIdentity, config.links);
+        router = new Router(this, config.routerIdentity);
         
 
         /* Setup a new Switch */

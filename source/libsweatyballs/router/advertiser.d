@@ -41,7 +41,7 @@ public final class Advertiser : Thread
         while(true)
         {
             /*  Cycle through each link and advertise on them */
-            Link[] links = router.getLinks();
+            Link[] links = router.getEngine().getLinks();
             foreach(Link link; links)
             {
                 gprintln("Sending advertisement on "~to!(string)(link)~" ...");

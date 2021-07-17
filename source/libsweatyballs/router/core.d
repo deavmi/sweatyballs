@@ -2,7 +2,7 @@ module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
-import libsweatyballs.link.table : Table;
+import libsweatyballs.router.table : Table;
 import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
@@ -15,26 +15,21 @@ import libsweatyballs.link.message.core : Message, test;
 */
 public final class Router : Thread
 {
-    /**
-    * Links the router can advertise over
-    */
-    private Link[] links;
-    private Mutex linksMutex;
+    
     private Advertiser advertiser;
 
     private Identity identity;
 
     private Table routingTable;
 
-    this(Identity identity, Link[] links)
+    this(Engine engine, Identity identity)
     {
         /* Set the thread's worker function */
         super(&worker);
 
-        /* Initialize locks */
-        initMutexes();
+        
 
-        this.links = links;
+        this.engine = engine;
         this.identity = identity;
 
         /* Create a new routing table */
@@ -44,13 +39,7 @@ public final class Router : Thread
         initAdvertiser();
     }
 
-    /**
-    * Initializes all the mutexes
-    */
-    private void initMutexes()
-    {
-        linksMutex = new Mutex();
-    }
+    
 
     private void initAdvertiser()
     {
@@ -89,18 +78,14 @@ public final class Router : Thread
         writeln(test().toProtobuf);
     }
 
-    public Link[] getLinks()
+    public Engine getEngine()
     {
-        Link[] copy;
+        return engine;
+    }
 
-        linksMutex.lock();
-        foreach(Link link; links)
-        {
-            copy ~= link;
-        }
-        linksMutex.unlock();
-
-        return copy;
+    public void getTable()
+    {
+        return routingTable;
     }
 
     public Identity getIdentity()
