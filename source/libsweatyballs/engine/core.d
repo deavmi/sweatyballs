@@ -74,6 +74,7 @@ public final class Engine
         /* TODO: Set configuration parameter */
 
         /* Setup links */
+        links = config.links;
         setupLinks(config.links);
 
         /* Setup a new Router */
