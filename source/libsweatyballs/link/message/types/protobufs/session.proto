@@ -29,7 +29,7 @@ message SessionMessage
 message DataMessage
 {
     //DataMessage
-    bytes data;
+    bytes data = 1;
 }
 
 message NewSessionMessage
