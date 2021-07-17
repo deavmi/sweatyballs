@@ -13,15 +13,6 @@ public import advertisement;
 public import packet;
 public import session;
 
-public packet.Message test()
-{
-    packet.Message d = new packet.Message();
-
-    d.publicKey = "hdjfjdsgfhjds";
-
-    return d;
-}
-
 public class Message
 {
     /* TODO: Variable for the protocol buffer */
