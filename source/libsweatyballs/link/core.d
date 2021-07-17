@@ -78,11 +78,11 @@ public final class Link : Thread
     {
         /* Setup the advertisement socket (bound to ff02::1%interface) port 6666 */
         mcastSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        mcastSock.bind(parseAddress("ff02::1%"~getInterface(), 6666));
+        mcastSock.bind(parseAddress("ff02::1%"~getInterface(), 7777));
 
         /* Setup the router-to-router socket (bound to ::) port 6667 */
         r2rSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        r2rSock.bind(parseAddress("::", 6667));
+        r2rSock.bind(parseAddress("::", 7778));
     }
 
     /**
