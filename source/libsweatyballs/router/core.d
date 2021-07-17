@@ -8,6 +8,7 @@ import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
 import libsweatyballs.link.message.core : Message, test;
 import libsweatyballs.engine.core : Engine;
+import gogga;
 
 /**
 * Router
@@ -72,7 +73,7 @@ public final class Router : Thread
 
             
             string routeInfo;
-            Route[] routes = table.getRoutes();
+            Route[] routes = routingTable.getRoutes();
             foreach(Route route; routes)
             {
                 routeInfo ~= routeInfo ~ to!(string)(route) ~ "\n";
