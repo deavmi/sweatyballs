@@ -86,6 +86,14 @@ public final class Link : Thread
     }
 
     /**
+    * Returns the router-to-router port being used for this link
+    */
+    public ushort getR2RPort()
+    {
+        return to!(ushort)(r2rSock.localAddress.toPortString());
+    }
+
+    /**
     * Listens for advertisements
     *
     * TODO: We also must listen for traffic here though
