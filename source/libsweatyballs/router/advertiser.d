@@ -87,7 +87,9 @@ public final class Advertiser : Thread
         Route[] routes = router.getTable().getRoutes();
         foreach(Route route; routes)
         {
-            d.routes ~= route.getAddress();
+            advertisement.RouteEntry cEntry = new advertisement.RouteEntry();
+            cEntry.address = route.getAddress();
+            d.routes ~= cEntry;
         }
 
 
