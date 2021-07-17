@@ -82,7 +82,7 @@ public final class Advertiser : Thread
         entry.address = router.getIdentity().getKeys().publicKey;
         entries ~= entry;
         d.routes = entries;
-        d.r2rPort = link.getR2RPort();
+        d.r2rPort = to!(string)(link.getR2RPort());
 
         /* get routes */
         Route[] routes = router.getTable().getRoutes();
