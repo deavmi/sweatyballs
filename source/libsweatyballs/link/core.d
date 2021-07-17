@@ -24,7 +24,7 @@ public final class Link : Thread
     * In and out queues
     */
     private packet.Message[] inQueue;
-    private Message[] outQueue;
+    private packet.Message[] outQueue;
     private Mutex inQueueLock;
     private Mutex outQueueLock;
 
@@ -128,7 +128,6 @@ public final class Link : Thread
     public packet.Message decode(byte[] data)
     {
         packet.Message message = fromProtobuf!(packet.Message)(data);
-
         return message;
     }
 
