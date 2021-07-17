@@ -6,7 +6,7 @@ import libsweatyballs.router.table : Table, Route;
 import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
-import libsweatyballs.link.message.core : Message, test;
+import libsweatyballs.link.message.core : Message;
 import libsweatyballs.engine.core : Engine;
 import gogga;
 import std.conv : to;
