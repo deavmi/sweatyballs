@@ -117,9 +117,18 @@ public final class Link : Thread
 
                 gprintln("Received data: "~to!(string)(data));
                 gprintln("Message from: "~to!(string)(address));
+                packet.Message message = decode(data);
+                gprintln("protoBuf: "~to!(string)(message));
             }
             
         }
+    }
+
+    public packet.Message decode(byte[] data)
+    {
+        packet.Message message = fromProtobuf(packet.Message, data);
+
+        return message;
     }
 
     public bool hasInQueue()
