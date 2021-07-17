@@ -73,7 +73,7 @@ public final class Advertiser : Thread
     private void advertise(Link link)
     {
         /* Create advertisement message */
-        advertisement.AdvertisementMessage d;
+        advertisement.AdvertisementMessage d = new  advertisement.AdvertisementMessage();
         advertisement.RouteEntry[] entries;
         advertisement.RouteEntry entry = new advertisement.RouteEntry();
         entries ~= entry;
