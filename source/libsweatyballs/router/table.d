@@ -76,6 +76,8 @@ public final class Table
 
         /* Unlock the routing table */
         routeLock.unlock();
+
+        return copiedRoutes;
     }
 
     /**
