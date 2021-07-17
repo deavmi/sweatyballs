@@ -69,6 +69,8 @@ public final class Advertiser : Thread
     * Send an IPv6 Multicast advertisement via link-local
     *
     * Sends to `ff02::1%<interface>:6666`
+    *
+    * TODO: Advertise self (we should insert our own route too perhaps or just do it here (eaiser))
     */
     private void advertise(Link link)
     {
@@ -76,6 +78,7 @@ public final class Advertiser : Thread
         advertisement.AdvertisementMessage d = new  advertisement.AdvertisementMessage();
         advertisement.RouteEntry[] entries;
         advertisement.RouteEntry entry = new advertisement.RouteEntry();
+        entry.address = "poes";
         entries ~= entry;
         d.routes = entries;
 
