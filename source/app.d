@@ -22,8 +22,8 @@ void main(string[] args)
 	config.routerIdentity = myIdentity;
 
 	/* Create some Links */
-	Link[] links;
-	links ~= new Link(interfaceName);
+	string[] links;
+	links ~= interfaceName;
 	//links ~= new Link("interface2");
 	config.links = links;
 

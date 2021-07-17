@@ -6,5 +6,5 @@ import libsweatyballs.link.core : Link;
 public struct Config
 {
     Identity routerIdentity;
-    Link[] links;
+    string[] links;
 }

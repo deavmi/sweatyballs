@@ -38,12 +38,16 @@ public final class Link : Thread
 
     private string interfaceName;
 
-    this(string interfaceName)
+
+    private Engine engine;
+
+    this(string interfaceName, Engine engine)
     {
         /* Set the thread's worker function */
         super(&worker);
 
         this.interfaceName = interfaceName;
+        this.engine = engine;
 
         /* Initialize locks */
         initMutexes();

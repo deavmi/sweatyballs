@@ -74,7 +74,7 @@ public final class Engine
         /* TODO: Set configuration parameter */
 
         /* Setup links */
-        links = config.links;
+        links = createLinks(config.links);
         setupLinks(config.links);
 
         /* Setup a new Router */
@@ -84,6 +84,18 @@ public final class Engine
         /* Setup a new Switch */
         zwitch = new Switch(this);
         
+    }
+
+    private Link[] createLinks(string[] interfaces)
+    {
+        Link[] createdLinks;
+
+        foreach(string interfaceName; interfaces)
+        {
+            createdLinks ~= new Link(interfaceName, this);
+        }
+
+        return createdLinks;
     }
 
     private void setupLinks(Link[] links)
@@ -106,6 +118,7 @@ public final class Engine
         zwitch.launch();
 
         /* Start collector */
+        /* TODO: Add me */
 
         gprintln("Engine has started all threads and is now going to finish and return to constructor thread control");
         
