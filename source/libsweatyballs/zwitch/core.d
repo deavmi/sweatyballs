@@ -1,6 +1,6 @@
 module libsweatyballs.zwitch.core;
 
-import libsweatyballs.router.core : Router;
+import libsweatyballs.engine.core : Engine;
 import core.thread : Thread;
 
 /**
@@ -11,15 +11,15 @@ import core.thread : Thread;
 */
 public final class Switch : Thread
 {
-    private Router router;
+    private Engine engine;
     private Session[] sessions;
 
-    this(Router router)
+    this(Engine engine)
     {
         /* Set the thread's worker function */
         super(&worker);
 
-        this.router = router;
+        this.engine = v;
     }
 
     private void worker()
