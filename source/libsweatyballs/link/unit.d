@@ -1,6 +1,6 @@
 module libsweatyballs.link.unit;
 
-import libsweatyballs.link.message.core : packet.Message;
+import libsweatyballs.link.message.core;
 import std.socket : Address;
 
 public final class LinkUnit
