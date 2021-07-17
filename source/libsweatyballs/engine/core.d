@@ -75,7 +75,7 @@ public final class Engine
 
         /* Setup links */
         links = createLinks(config.links);
-        setupLinks(config.links);
+        setupLinks(links);
 
         /* Setup a new Router */
         router = new Router(this, config.routerIdentity);
