@@ -2,8 +2,9 @@ module libsweatyballs.engine.core;
 
 import libsweatyballs.router.core : Router;
 import libsweatyballs.zwitch.core : Switch;
-import libsweatyballs.engine.configuration : Config;
 import libsweatyballs.link.core : Link;
+import core.sync.mutex : Mutex;
+import libsweatyballs.engine.configuration : Config;
 import std.conv : to;
 import gogga;
 
