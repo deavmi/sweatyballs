@@ -2,6 +2,7 @@ module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
+import libsweatyballs.link.table : Table;
 import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
@@ -19,10 +20,11 @@ public final class Router : Thread
     */
     private Link[] links;
     private Mutex linksMutex;
-
     private Advertiser advertiser;
 
     private Identity identity;
+
+    private Table routingTable;
 
     this(Identity identity, Link[] links)
     {
@@ -34,6 +36,9 @@ public final class Router : Thread
 
         this.links = links;
         this.identity = identity;
+
+        /* Create a new routing table */
+        routingTable = new Table();
 
         /* Initialize the advertiser */
         initAdvertiser();
