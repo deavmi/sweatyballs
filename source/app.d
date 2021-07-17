@@ -10,7 +10,6 @@ void main(string[] args)
 {
 	gprintln("Welcome to sweatyballs");
 
-	string interfaceName = args[1];
 
 	/* TODO: Add command-line parsing here with jcli */
 
@@ -22,8 +21,7 @@ void main(string[] args)
 	config.routerIdentity = myIdentity;
 
 	/* Create some Links */
-	string[] links;
-	links ~= interfaceName;
+	string[] links = args[1..args.length];
 	//links ~= new Link("interface2");
 	config.links = links;
 
