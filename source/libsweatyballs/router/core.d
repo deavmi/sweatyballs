@@ -85,13 +85,6 @@ public final class Router : Thread
         }
     }
 
-    private void process(Message messageIn)
-    {
-        import std.stdio;
-        import google.protobuf;
-        writeln(test().toProtobuf);
-    }
-
     public Engine getEngine()
     {
         return engine;
