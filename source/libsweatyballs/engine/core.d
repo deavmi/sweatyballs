@@ -82,7 +82,7 @@ public final class Engine
         
 
         /* Setup a new Switch */
-        zwitch = new Switch(router);
+        zwitch = new Switch(this);
         
     }
 
