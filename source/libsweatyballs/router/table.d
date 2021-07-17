@@ -12,6 +12,13 @@ public final class Route
 {
     private string address;
     private Address nexthop;
+
+    /**
+    * TODO: Set these and add a loop watcher to
+    * the table
+    */
+    private ulong tiemout;
+    private string creationTime;
     
     this(string address, Address nexthop)
     {
