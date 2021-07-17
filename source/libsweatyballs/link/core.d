@@ -82,7 +82,7 @@ public final class Link : Thread
 
         /* Setup the router-to-router socket (bound to ::) port 6667 */
         r2rSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        r2rSock.bind(parseAddress("::", 6667));
+        r2rSock.bind(parseAddress("::", 0));
     }
 
     /**
