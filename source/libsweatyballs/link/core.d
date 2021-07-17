@@ -3,6 +3,7 @@ module libsweatyballs.link.core;
 import libsweatyballs.link.message.core;
 import libsweatyballs.link.unit : LinkUnit;
 import core.sync.mutex : Mutex;
+import libsweatyballs.engine.core : Engine;
 import core.thread : Thread;
 import bmessage;
 import std.socket;
