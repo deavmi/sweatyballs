@@ -1,6 +1,6 @@
 module libsweatyballs.link.core;
 
-import libsweatyballs.link.message.core : Message;
+import libsweatyballs.link.message.core;
 import core.sync.mutex : Mutex;
 import core.thread : Thread;
 import bmessage;
@@ -22,10 +22,16 @@ public final class Link : Thread
     /**
     * In and out queues
     */
-    private Message[] inQueue;
+    private packet.Message[] inQueue;
     private Message[] outQueue;
     private Mutex inQueueLock;
     private Mutex outQueueLock;
+
+    /**
+    * Sockets
+    */
+    private Socket mcastSock;
+    private Socket r2rSock;
 
     private string interfaceName;
 
@@ -38,6 +44,9 @@ public final class Link : Thread
 
         /* Initialize locks */
         initMutexes();
+
+        /* Setup networking */
+        setupSockets();
     }
 
     public string getInterface()
@@ -55,20 +64,25 @@ public final class Link : Thread
     }
 
     /**
+    * Sets up sockets
+    */
+    private void setupSockets()
+    {
+        /* Setup the advertisement socket (bound to ff02::1%interface) port 6666 */
+        mcastSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+        mcastSock.bind(parseAddress("ff02::1%"~getInterface(), 6666));
+
+        /* Setup the router-to-router socket (bound to ::) port 6667 */
+        r2rSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+    }
+
+    /**
     * Listens for advertisements
+    *
+    * TODO: We also must listen for traffic here though
     */
     private void worker()
     {
-        /* TODO: Implement me */
-        
-        /* TODO: Make whatever this class is used for more specific */
-
-        /* Create a Socket for (TODO) */
-        Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-
-        /* Listen on the multicast address on port 6666 */
-        socket.bind(parseAddress("ff02::1%"~getInterface(), 6666));
-
         while(true)
         {
 
@@ -89,7 +103,7 @@ public final class Link : Thread
             data.length = 1;
             
             gprintln("Awaiting message...");
-            long len = socket.receiveFrom(data, flags, address);
+            long len = mcastSock.receiveFrom(data, flags, address);
 
             if(len <= 0)
             {
@@ -98,7 +112,7 @@ public final class Link : Thread
             else
             {
                 data.length = len;
-                socket.receiveFrom(data, address);
+                mcastSock.receiveFrom(data, address);
 
                 gprintln("Received data: "~to!(string)(data));
                 gprintln("Message from: "~to!(string)(address));
@@ -116,9 +130,9 @@ public final class Link : Thread
         return status;
     }
 
-    public Message popInQueue()
+    public packet.Message popInQueue()
     {
-        Message message;
+        packet.Message message;
 
         /* TODO: Throw exception on `hasInQueue()` false */
 
@@ -163,7 +177,7 @@ public final class Link : Thread
     /**
     * Blocks to receive one message from the incoming queue
     */
-    public Message receive()
+    public packet.Message receive()
     {
         /* TODO: Implement me */
         return null;
@@ -172,7 +186,7 @@ public final class Link : Thread
     /**
     * Sends a message
     */
-    public void send(Message message, string recipient)
+    public void send(packet.Message message, string recipient)
     {
         /* TODO: Implement me */
     }
