@@ -7,6 +7,7 @@ import bmessage;
 import std.socket;
 import gogga;
 import std.conv : to;
+import google.protobuf;
 
 /**
 * Link
