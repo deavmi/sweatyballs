@@ -36,5 +36,63 @@ public final class Route
 */
 public final class Table
 {
+    /**
+    * Routes
+    */
+    private Route[] routes;
+    private Mutex routeLock;
+
+    this()
+    {
+        /* Initialize locks */
+        initMutexes();
+    }
+
+    /**
+    * Initialize the mutexes
+    */
+    private void initMutexes()
+    {
+        routeLock =  new Mutex();
+    }
+
+    /**
+    * Get routes
+    */
+    public Route[] getRoutes()
+    {
+        /* The copied routes */
+        Route[] copiedRoutes;
+
+        /* Lock the routing table */
+        routeLock.lock();
+
+        /* Copy each route */
+        foreach(Route route; routes)
+        {
+            copiedRoutes ~= route;
+        }
+
+        /* Unlock the routing table */
+        routeLock.unlock();
+    }
+
+    /**
+    * Add a route 
+    */
+    public void addRoute(Route route)
+    {
+        /* Lock the routing table */
+        routeLock.lock();
+
+        /* Add the route */
+        routes ~= route;
+
+        /* Unlock the routing table */
+        routeLock.unlock();
+    }
+
+
+    /* TODO; Remove route */
 
 }
