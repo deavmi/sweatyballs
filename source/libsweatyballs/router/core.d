@@ -22,6 +22,8 @@ public final class Router : Thread
 
     private Advertiser advertiser;
 
+    private Identity identity;
+
     this(Identity identity, Link[] links)
     {
         /* Set the thread's worker function */
@@ -31,6 +33,7 @@ public final class Router : Thread
         initMutexes();
 
         this.links = links;
+        this.identity = identity;
 
         /* Initialize the advertiser */
         initAdvertiser();
@@ -93,6 +96,11 @@ public final class Router : Thread
         linksMutex.unlock();
 
         return copy;
+    }
+
+    public Identity getIdentity()
+    {
+        return identity;
     }
 
     public void launch()

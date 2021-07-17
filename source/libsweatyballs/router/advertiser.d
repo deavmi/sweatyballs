@@ -82,9 +82,9 @@ public final class Advertiser : Thread
 
         /* Create Message */
         packet.Message message = new packet.Message();
-        message.publicKey = router.getIdentity().getPublicKey();
+        message.publicKey = router.getIdentity().getKeys().publicKey;
         message.signature = "TODO";
-        message.type = pacjet.MessageType.ADVERTISEMENT;
+        message.type = packet.MessageType.ADVERTISEMENT;
         message.payload = array(toProtobuf(d));
 
         /* Encode the Message */
