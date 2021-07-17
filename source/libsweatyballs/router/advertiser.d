@@ -78,7 +78,7 @@ public final class Advertiser : Thread
         advertisement.AdvertisementMessage d = new  advertisement.AdvertisementMessage();
         advertisement.RouteEntry[] entries;
         advertisement.RouteEntry entry = new advertisement.RouteEntry();
-        entry.address = router.getIdentity().publicKey;
+        entry.address = router.getIdentity().getKeys().publicKey;
         entries ~= entry;
         d.routes = entries;
 
