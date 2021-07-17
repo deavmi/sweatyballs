@@ -86,6 +86,11 @@ public final class Engine
         
     }
 
+    public Router getRouter()
+    {
+        return router;
+    }
+
     private Link[] createLinks(string[] interfaces)
     {
         Link[] createdLinks;
