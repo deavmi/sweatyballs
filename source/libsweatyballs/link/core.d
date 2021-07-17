@@ -145,8 +145,36 @@ public final class Link : Thread
         Address sender = unit.getSender();
         gprintln("Processing message from "~to!(string)(sender)~
                 " of type "~to!(string)(mType));
+        gprintln("Public key: "~message.publicKey);
 
-        
+        ubyte[] msgPayload = message.payload;
+
+        /* Handle route advertisements */
+        if(mType == packet.MessageType.ADVERTISEMENT)
+        {
+            advertisement.AdvertisementMessage advMsg = fromProtobuf!(advertisement.AdvertisementMessage)(msgPayload);
+
+            /* Get the routes being advertised */
+            RouteEntry[] routes = advMsg.routes;
+            gprintln("Total of "~to!(string)(routes.length)~" received");
+
+            /* Add each route to the routing table */
+            foreach(RouteEntry route; routes)
+            {
+                // router.
+                gprintln("Added route ");
+            }
+        }
+        /* Handle session messages */
+        else if(mType == packet.MessageType.SESSION)
+        {
+
+        }
+        /* TODO: Does protobuf throw en error if so? */
+        else
+        {
+            assert(false);
+        }
     }
 
     public packet.Message decode(byte[] data)
