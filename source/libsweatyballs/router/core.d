@@ -59,19 +59,19 @@ public final class Router : Thread
         
         while(true)
         {
-            /* Cycle through the in queue of each link */
-            Link[] links = getLinks();
-            foreach(Link link; links)
-            {
-                /* Check if the in-queue has anything in it */
-                if(link.hasInQueue())
-                {
-                    Message message = link.popInQueue();
-                    process(message);
-                }
-            }
+            // /* Cycle through the in queue of each link */
+            // Link[] links = getLinks();
+            // foreach(Link link; links)
+            // {
+            //     /* Check if the in-queue has anything in it */
+            //     if(link.hasInQueue())
+            //     {
+            //         Message message = link.popInQueue();
+            //         process(message);
+            //     }
+            // }
 
-            process(null);
+            // process(null);
 
             sleep(dur!("seconds")(1));
         }
