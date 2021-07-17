@@ -2,9 +2,10 @@ module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
-import core.thread : Thread;
+import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
+import libsweatyballs.link.message.core : Message, test;
 
 /**
 * Router
@@ -51,10 +52,33 @@ public final class Router : Thread
     private void worker()
     {
         /* TODO: Implement me */
+
+        
         while(true)
         {
-            /* TODO: Cycle through each with timeout wait */
+            /* Cycle through the in queue of each link */
+            Link[] links = getLinks();
+            foreach(Link link; links)
+            {
+                /* Check if the in-queue has anything in it */
+                if(link.hasInQueue())
+                {
+                    Message message = link.popInQueue();
+                    process(message);
+                }
+            }
+
+            process(null);
+
+            sleep(dur!("seconds")(1));
         }
+    }
+
+    private void process(Message messageIn)
+    {
+        import std.stdio;
+        import google.protobuf;
+        writeln(test().toProtobuf);
     }
 
     public Link[] getLinks()
