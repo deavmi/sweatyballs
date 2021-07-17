@@ -8,8 +8,11 @@ syntax="proto3";
 
 message AdvertisementMessage
 {
+    //Port to connect to for router to router interface on this link
+    string r2rPort = 1;
+
     // The routes in this advertisement
-    repeated RouteEntry routes = 1;
+    repeated RouteEntry routes = 2;
 }
 
 
