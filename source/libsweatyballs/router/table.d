@@ -95,8 +95,18 @@ public final class Table
         /* Lock the routing table */
         routeLock.lock();
 
-        /* Add the route */
+        /* Add the route (only if it doesn't already exist) */
+        foreach(Route cRoute; routes)
+        {
+            if(cmp(cRoute.getAddress(), route.getAddress()) == 0)
+            {
+                goto no_add_route;
+            }
+        }
+
         routes ~= route;
+        
+        no_add_route:
 
         /* Unlock the routing table */
         routeLock.unlock();
