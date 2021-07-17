@@ -10,6 +10,7 @@ import bmessage;
 import libsweatyballs.link.message.core;
 import google.protobuf;
 import std.array : array;
+import libsweatyballs.router.table : Route;
 
 public final class Advertiser : Thread
 {
