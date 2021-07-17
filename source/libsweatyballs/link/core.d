@@ -9,6 +9,7 @@ import std.socket;
 import gogga;
 import std.conv : to;
 import google.protobuf;
+import libsweatyballs.router.table : Route;
 
 /**
 * Link
@@ -158,11 +159,14 @@ public final class Link : Thread
             RouteEntry[] routes = advMsg.routes;
             gprintln("Total of "~to!(string)(routes.length)~" received");
 
+            /* TODO: Do router2router verification here */
+
             /* Add each route to the routing table */
             foreach(RouteEntry route; routes)
             {
-                // router.
-                gprintln("Added route ");
+                Route newRoute = new Route(route.address, sender);
+                engine.getRouter().getTable().addRoute(newRoute);
+                gprintln("Added route "~to!(string)(newRoute));
             }
         }
         /* Handle session messages */
