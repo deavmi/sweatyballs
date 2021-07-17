@@ -17,7 +17,7 @@ public final class Route
     * TODO: Set these and add a loop watcher to
     * the table
     */
-    private ulong tiemout;
+    private ulong timeout;
     private string creationTime;
     
     this(string address, Address nexthop)
