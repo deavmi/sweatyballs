@@ -7,10 +7,14 @@ import std.socket;
 import gogga;
 import std.conv : to;
 import bmessage;
+import libsweatyballs.link.message.core;
+import google.protobuf;
+import std.array : array;
 
 public final class Advertiser : Thread
 {
     private Router router;
+    private Socket mcastSock;
 
     this(Router router)
     {
@@ -18,6 +22,17 @@ public final class Advertiser : Thread
         super(&worker);
 
         this.router = router;
+
+        /* Setup socket */
+        setupSocket();
+    }
+
+    private void setupSocket()
+    {
+        /* TODO: Error handling */
+        mcastSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+
+
     }
 
     private void worker()
@@ -42,29 +57,33 @@ public final class Advertiser : Thread
         start();
     }
 
+    public void shutdown()
+    {
+        /* TODO: Implement me */
+
+        /* Close the multicast socket */
+        mcastSock.close();
+    }
+
     /**
     * Send an IPv6 Multicast advertisement via link-local
     *
-    * The multicast address used is `ff69::1` because the
-    * sex number is cool and I am a 22 year old virgin
-    *
-    * TODO: Enqueue this somehow onto Link's sendqueue?
+    * Sends to `ff02::1%<interface>:6666`
     */
     private void advertise(Link link)
     {
-        /* TODO: Add error handling */
-        Socket socket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        byte[] message = [65,66,66,65,65,66,66,65,65,66,66,65];
+        /* Create advertisement message */
+        advertisement.AdvertisementMessage d;
+        advertisement.RouteEntry[] entries;
+        advertisement.RouteEntry entry = new advertisement.RouteEntry();
+        entries ~= entry;
+        d.routes = entries;
 
         /* Encode using bformat */
         /* TODO: UDP, so actually remove this */
-        byte[] buff = encodeBformat(message);
+        byte[] buff = encodeBformat(cast(byte[])array(toProtobuf(d)));
 
-
-
-        gprintln("Bruh"~link.getInterface());
-        ulong stats = socket.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
-        socket.close();
+        ulong stats = mcastSock.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
 
         import std.conv : to;
         gprintln("Status"~to!(string)(stats));
