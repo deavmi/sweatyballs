@@ -78,9 +78,16 @@ public final class Advertiser : Thread
         advertisement.AdvertisementMessage d = new  advertisement.AdvertisementMessage();
         advertisement.RouteEntry[] entries;
         advertisement.RouteEntry entry = new advertisement.RouteEntry();
-        entry.address = "poes";
+        entry.address = router.getIdentity().publicKey;
         entries ~= entry;
         d.routes = entries;
+
+        /* get routes */
+        Route[] routes = router.getTable().getRoutes();
+        foreach(Route route; routes)
+        {
+            d.routes ~= route.getAddress();
+        }
 
 
         /* Create Message */
