@@ -69,7 +69,7 @@ public final class Advertiser : Thread
     /**
     * Send an IPv6 Multicast advertisement via link-local
     *
-    * Sends to `ff02::1%<interface>:7777`
+    * Sends to `ff02::1%<interface>:6666`
     *
     * TODO: Advertise self (we should insert our own route too perhaps or just do it here (eaiser))
     */
@@ -103,7 +103,7 @@ public final class Advertiser : Thread
         /* Encode the Message */
         byte[] buff = cast(byte[])array(toProtobuf(message));
 
-        ulong stats = mcastSock.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 7777));
+        ulong stats = mcastSock.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
 
         import std.conv : to;
         gprintln("Status"~to!(string)(stats));
