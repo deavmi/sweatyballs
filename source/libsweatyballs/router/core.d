@@ -9,6 +9,7 @@ import libsweatyballs.router.advertiser : Advertiser;
 import libsweatyballs.link.message.core : Message, test;
 import libsweatyballs.engine.core : Engine;
 import gogga;
+import std.conv : to;
 
 /**
 * Router
