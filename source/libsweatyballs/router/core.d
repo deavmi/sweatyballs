@@ -86,7 +86,7 @@ public final class Router : Thread
         return engine;
     }
 
-    public void getTable()
+    public Table getTable()
     {
         return routingTable;
     }
