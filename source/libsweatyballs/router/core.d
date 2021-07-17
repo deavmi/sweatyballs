@@ -2,7 +2,7 @@ module libsweatyballs.router.core;
 
 import libsweatyballs.link.core : Link;
 import libsweatyballs.security.identity : Identity;
-import libsweatyballs.router.table : Table;
+import libsweatyballs.router.table : Table, Route;
 import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
