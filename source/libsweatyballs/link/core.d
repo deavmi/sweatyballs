@@ -1,6 +1,7 @@
 module libsweatyballs.link.core;
 
 import libsweatyballs.link.message.core;
+import libsweatyballs.link.message.unit : LinkUnit;
 import core.sync.mutex : Mutex;
 import core.thread : Thread;
 import bmessage;
@@ -23,8 +24,8 @@ public final class Link : Thread
     /**
     * In and out queues
     */
-    private packet.Message[] inQueue;
-    private packet.Message[] outQueue;
+    private LinkUnit[] inQueue;
+    private LinkUnit[] outQueue;
     private Mutex inQueueLock;
     private Mutex outQueueLock;
 
@@ -113,13 +114,18 @@ public final class Link : Thread
             }
             else
             {
+                /* Receive at the length found */
                 data.length = len;
                 mcastSock.receiveFrom(data, address);
 
-                gprintln("Received data: "~to!(string)(data));
-                gprintln("Message from: "~to!(string)(address));
+                /* Decode the message */
                 packet.Message message = decode(data);
-                gprintln("protoBuf: "~to!(string)(message));
+
+                /* Couple Address-and-message */
+                LinkUnit unit = new LinkUnit(address, message);
+
+                /* Add to the in-queue */
+                enqueueIn(unit);  
             }
             
         }
@@ -132,6 +138,14 @@ public final class Link : Thread
         return message;
     }
 
+    private void enqueueIn(LinkUnit unit)
+    {
+        /* Add to the in-queue */
+        inQueueLock.lock();
+        inQueue ~= unit;
+        inQueueLock.unlock();
+    }
+
     public bool hasInQueue()
     {
         bool status;
@@ -141,9 +155,9 @@ public final class Link : Thread
         return status;
     }
 
-    public packet.Message popInQueue()
+    public LinkUnit popInQueue()
     {
-        packet.Message message;
+        LinkUnit message;
 
         /* TODO: Throw exception on `hasInQueue()` false */
 
