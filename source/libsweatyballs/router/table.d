@@ -3,6 +3,7 @@ module libsweatyballs.router.table;
 import std.socket : Address;
 import core.sync.mutex : Mutex;
 import std.conv : to;
+import std.string : cmp;
 
 /**
 * Route
