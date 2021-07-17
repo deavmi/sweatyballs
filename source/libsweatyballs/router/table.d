@@ -2,6 +2,7 @@ module libsweatyballs.router.table;
 
 import std.socket : Address;
 import core.sync.mutex : Mutex;
+import std.conv : to;
 
 /**
 * Route
@@ -34,6 +35,11 @@ public final class Route
     public Address getNexthop()
     {
         return nexthop;
+    }
+
+    public override string toString()
+    {
+        return "Route (To: "~address~", Via: "~to!(string)(nexthop)~")";
     }
 }
 
@@ -114,5 +120,4 @@ public final class Table
 
 
     /* TODO; Remove route */
-
 }
