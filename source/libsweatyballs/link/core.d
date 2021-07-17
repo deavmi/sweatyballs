@@ -127,7 +127,8 @@ public final class Link : Thread
 
     public packet.Message decode(byte[] data)
     {
-        packet.Message message = fromProtobuf!(packet.Message)(cast(ubyte[])data);
+        ubyte[] dataIn = cast(ubyte[])data;
+        packet.Message message = fromProtobuf!(packet.Message)(dataIn);
         return message;
     }
 
