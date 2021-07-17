@@ -81,9 +81,13 @@ public final class Link : Thread
             flags |= MSG_TRUNC;
             flags |= MSG_PEEK;
 
+            /* Receive buffer */
             byte[] data;
-            data.length = 1;
             Address address;
+
+            /* Empty array won't work */
+            data.length = 1;
+            
             gprintln("Awaiting message...");
             long len = socket.receiveFrom(data, flags, address);
 
@@ -103,10 +107,58 @@ public final class Link : Thread
         }
     }
 
+    public bool hasInQueue()
+    {
+        bool status;
+        inQueueLock.lock();
+        status = inQueue.length != 0;
+        inQueueLock.unlock();
+        return status;
+    }
+
+    public Message popInQueue()
+    {
+        Message message;
+
+        /* TODO: Throw exception on `hasInQueue()` false */
+
+        inQueueLock.lock();
+
+        /* Pop the message */
+        message = inQueue[0];
+
+        if(inQueue.length == 1)
+        {
+            inQueue.length = 0;
+        }
+        else
+        {
+            inQueue = inQueue[1..inQueue.length];
+        }
+
+        inQueueLock.unlock();
+
+        return message;
+    }
+
+    // public bool hasOutQueue()
+    // {
+    //     bool status;
+    //     inQueueLock.lock();
+    //     status = inQueue.length != 0;
+    //     inQueueLock.unlock();
+    //     return status;
+    // }
+
+    
+
+
     public void launch()
     {
         start();
     }
+
+
 
     /**
     * Blocks to receive one message from the incoming queue
