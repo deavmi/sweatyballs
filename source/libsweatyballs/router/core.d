@@ -70,7 +70,18 @@ public final class Router : Thread
 
             // process(null);
 
-            sleep(dur!("seconds")(1));
+            
+            string routeInfo;
+            Route[] routes = table.getRoutes();
+            foreach(Route route; routes)
+            {
+                routeInfo ~= routeInfo ~ to!(string)(route) ~ "\n";
+            }
+
+            gprintln("<<<<<<< Routing table state >>>>>>>\n"~routeInfo);
+
+
+            sleep(dur!("seconds")(5));
         }
     }
 
