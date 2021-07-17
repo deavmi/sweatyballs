@@ -124,11 +124,29 @@ public final class Link : Thread
                 /* Couple Address-and-message */
                 LinkUnit unit = new LinkUnit(address, message);
 
-                /* Add to the in-queue */
-                enqueueIn(unit);  
+                /* Process message */
+                process(unit); 
             }
             
         }
+    }
+
+
+    /**
+    * This will process the message
+    *
+    * Handles message type: SESSION, ADVERTISEMENT
+    */
+    private void process(LinkUnit unit)
+    {
+        /* Message details */
+        packet.Message message = unit.getMessage();
+        packet.MessageType mType = message.type;
+        Address sender = unit.getSender();
+        gprintln("Processing message from "~to!(string)(sender)~
+                " of type "~to!(string)(mType));
+
+        
     }
 
     public packet.Message decode(byte[] data)
