@@ -7,6 +7,7 @@ import core.thread : Thread, dur;
 import core.sync.mutex : Mutex;
 import libsweatyballs.router.advertiser : Advertiser;
 import libsweatyballs.link.message.core : Message, test;
+import libsweatyballs.engine.core : Engine;
 
 /**
 * Router
@@ -21,6 +22,8 @@ public final class Router : Thread
     private Identity identity;
 
     private Table routingTable;
+
+    private Engine engine;
 
     this(Engine engine, Identity identity)
     {
