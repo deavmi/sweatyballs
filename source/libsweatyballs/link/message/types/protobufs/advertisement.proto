@@ -15,9 +15,18 @@ message AdvertisementMessage
     repeated RouteEntry routes = 2;
 }
 
+// Whether or not the route should be removed
+// or added
+enum RouteCommand
+{
+    ADD = 0;
+    REMOVE = 1;
+}
 
 message RouteEntry
 {
+    RouteCommand command = 1;
+
     // Address this is a route to
-    string address = 1;
+    string address = 2;
 }
