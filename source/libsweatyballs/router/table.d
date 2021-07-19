@@ -64,11 +64,6 @@ public final class Route
     public bool isExpired()
     {
         Duration elapsedTime = updateTime.peek();
-        import gogga;
-        gprintln(elapsedTime);
-        gprintln(elapsedTime.total!("seconds"));
-        gprintln(timeout);
-
         return (elapsedTime.total!("seconds") >= timeout);
     }
 }
