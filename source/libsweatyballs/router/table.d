@@ -14,6 +14,8 @@ import std.datetime : Duration;
 */
 public final class Route
 {
+    // We must know our self-route and add it too somewhere
+    //private __gshared Identity d;
     private string address;
     private Address nexthop;
     private uint metric;
