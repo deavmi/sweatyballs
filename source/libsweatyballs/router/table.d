@@ -121,11 +121,12 @@ public final class Table
         /* Add the route (only if it doesn't already exist) */
         foreach(Route cRoute; routes)
         {
+            /* FIXME: Make sure nexthop matches as well */
             if(cmp(cRoute.getAddress(), route.getAddress()) == 0)
             {
                 /* Refresh the route */
                 cRoute.refreshTime();
-                
+
                 goto no_add_route;
             }
         }
