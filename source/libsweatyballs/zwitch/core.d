@@ -8,11 +8,13 @@ import core.sync.mutex : Mutex;
 import std.string : cmp;
 import std.conv : to;
 import gogga;
+import std.socket;
+import libsweatyballs.router.table : Route;
 
 /**
 * Switch
 *
-* Manages session (far and local)
+* Manages session (far) and neighbour comms
 *
 * You send and receive data here. The switch asks router for routes
 * and then sends stuff on the next-hop to them (if direct) or via them
@@ -28,6 +30,13 @@ public final class Switch : Thread
     */
     private Neighbor[] neighbors;
     private Mutex neighborsLock;
+
+    /**
+    * Neighbor communications
+    *
+    * Node-to-node
+    */
+    private Socket neighborSocket;
 
     this(Engine engine)
     {
@@ -87,6 +96,11 @@ public final class Switch : Thread
         neighborsLock.unlock();
     }
 
+    private void initSockets()
+    {
+        neighborSocket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+    }
+
     private void worker()
     {
         /* TODO: Implement me */
@@ -101,6 +115,23 @@ public final class Switch : Thread
         start();
     }
 
+    private Neighbor isNeighbour(string address)
+    {
+        Neighbor match;
+
+        Neighbor[] neighbors = getNeighbors();
+        foreach(Neighbor neighbor; neighbors)
+        {
+            if(cmp(neighbor.getIdentity(), address) == 0)
+            {
+                match = neighbor;
+                break;
+            }
+        }
+
+        return match;
+    }
+
     /**
     * Send a packet
     *
@@ -108,7 +139,35 @@ public final class Switch : Thread
     */
     public void sendPacket(string address, byte[] data)
     {
+        /* Next-hop (for delivery), this is either a router or destination direct */
+        Neighbor nextHop;
+
         /* Construct a Datapacket */
+
+        /* Find out whether `address` is local (a neighbour) or not */
+        Neighbor possibleNeighbor = isNeighbour(address);
+        if(possibleNeighbor)
+        {
+            gprintln("sendPacket: We are sending to a neighor", DebugType.WARNING);
+            nextHop = possibleNeighbor;
+        }
+        else
+        {
+            gprintln("sendPacket: We are sending to a node VIA router", DebugType.WARNING);
+
+            /* Make sure there is a route entry for it */
+            Route routeToHost = engine.getRouter().getTable().lookup(address);
+            if(routeToHost)
+            {
+                /* Set the next hop to the neighbor with the address in the route entry */
+                nextHop = isNeighbour(routeToHost.getNexthopIdentity());
+                gprintln("sendPacket: Next-hop (indirect): "~to!(string)(routeToHost));
+            }
+            else
+            {
+                gprintln("sendPacket: No route to "~address, DebugType.ERROR);
+            }
+        }
 
 
 
@@ -121,10 +180,23 @@ public final class Switch : Thread
     }
 
     /* TODO: Move this elsewhere */
-    public class Session
+    public class Session : Thread
     {
         private string aesKey;
         private string sessionID;
+
+        private Socket neighborSock;
+
+        this(Socket clientSocket)
+        {
+            super(&worker);
+            this.neighborSock = neighborSock;
+        }
+
+        private void worker()
+        {
+
+        }
     }
 
     private Session fetchSession(string address)
