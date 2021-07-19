@@ -24,9 +24,10 @@ message Message
     // Cryptographic details
     string publicKey = 1;
     string signature = 2;
+    uint32 neighborPort = 3;
 
     //Message details
-    MessageType type = 3;
-    bytes payload = 4;
+    MessageType type = 4;
+    bytes payload = 5;
 }
 
