@@ -11,6 +11,7 @@ import gogga;
 import std.conv : to;
 import google.protobuf;
 import libsweatyballs.router.table : Route;
+import libsweatyballs.zwitch.neighbor : Neighbor;
 
 /**
 * Link
@@ -147,21 +148,52 @@ public final class Link : Thread
 
 
     /**
+    * Given Address we take the IP address (not source port of mcast packet)
+    * and then also the `nieghborPort` and spit out a new Address
+    */
+    private static Address getNeighborIPAddress(Address sender, ushort neighborPort)
+    {
+        /* IPv6 reachable neighbor socket */
+        Address neighborAddress = parseAddress(sender.toAddrString(), neighborPort);
+
+        return neighborAddress;
+    }
+
+    /**
     * This will process the message
     *
     * Handles message type: SESSION, ADVERTISEMENT
     */
     private void process(LinkUnit unit)
     {
-        /* Message details */
+        /**
+        * Message details
+        *
+        * 1. Public key
+        * 2. Signature
+        * 3. Neighbor port
+        * 4. Message type
+        * 5. Payload
+        */
         packet.Message message = unit.getMessage();
+
         packet.MessageType mType = message.type;
         Address sender = unit.getSender();
+        string identity = message.publicKey;
+        ushort neighborPort = to!(ushort)(message.neighborPort);
         gprintln("Processing message from "~to!(string)(sender)~
                 " of type "~to!(string)(mType));
-        gprintln("Public key: "~message.publicKey);
+        gprintln("Public key: "~identity);
+        gprintln("Signature: Not yet implemented");
+        gprintln("Neighbor Port: "~to!(string)(neighborPort));
+
 
         ubyte[] msgPayload = message.payload;
+
+        /* Irrespective of the message type, add to NeighborDB */
+        Address neighborAddress = getNeighborIPAddress(sender, neighborPort);
+        Neighbor neighbor = new Neighbor(identity, neighborAddress);
+        engine.getSwitch().addNeighbor(neighbor);
 
         /* Handle route advertisements */
         if(mType == packet.MessageType.ADVERTISEMENT)
