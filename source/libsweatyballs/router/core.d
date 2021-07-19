@@ -70,6 +70,9 @@ public final class Router : Thread
 
             // process(null);
 
+            /* Check if any routes need to be expired */
+            checkRouteExpiration();
+
             
             string routeInfo;
             Route[] routes = routingTable.getRoutes();
@@ -82,6 +85,18 @@ public final class Router : Thread
 
 
             sleep(dur!("seconds")(5));
+        }
+    }
+
+    private void checkRouteExpiration()
+    {
+        Route[] routes = routingTable.getRoutes();
+        foreach(Route route; routes)
+        {
+            if(route.isExpired())
+            {
+                routingTable.removeRoute(route);
+            }
         }
     }
 
