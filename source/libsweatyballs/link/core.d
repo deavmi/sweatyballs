@@ -184,8 +184,11 @@ public final class Link : Thread
                 Address nexthop = parseAddress(sender.toAddrString(), r2rPort);
                 uint metric = route.metric;
 
-                /* Create a new route with `nexthop` as the nexthop address */
-                Route newRoute = new Route(route.address, nexthop, 100, metric);
+                /**
+                * Create a new route with `nexthop` as the nexthop address
+                * Also set its metric to whatever it is +64
+                */
+                Route newRoute = new Route(route.address, nexthop, 100, metric+64);
                 engine.getRouter().getTable().addRoute(newRoute);
                 gprintln("Added route "~to!(string)(newRoute));
             }
