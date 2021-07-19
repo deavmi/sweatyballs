@@ -49,7 +49,7 @@ public final class Advertiser : Thread
                 advertise(link);
             }
 
-            sleep(dur!("seconds")(101));
+            sleep(dur!("seconds")(2));
         }
     }
 
