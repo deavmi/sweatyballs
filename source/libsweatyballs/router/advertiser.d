@@ -83,6 +83,7 @@ public final class Advertiser : Thread
         advertisement.RouteEntry[] entries;
         advertisement.RouteEntry entry = new advertisement.RouteEntry();
         entry.address = router.getIdentity().getKeys().publicKey;
+        entry.metric = 64;
         entries ~= entry;
         d.routes = entries;
         d.r2rPort = to!(string)(link.getR2RPort());
@@ -93,6 +94,7 @@ public final class Advertiser : Thread
         {
             advertisement.RouteEntry cEntry = new advertisement.RouteEntry();
             cEntry.address = route.getAddress();
+            cEntry.metric = route.getMetric();
             d.routes ~= cEntry;
         }
 
