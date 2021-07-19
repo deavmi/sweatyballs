@@ -52,6 +52,11 @@ public final class Route
         return nexthop;
     }
 
+    public uint getMetric()
+    {
+        return metric;
+    }
+
     public override string toString()
     {
         return "Route (To: "~address~", Via: "~to!(string)(nexthop)~", Metric: "~to!(string)(metric)~", Age: "~to!(string)(getAge())~")";
