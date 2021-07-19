@@ -6,6 +6,7 @@ import std.conv : to;
 import std.string : cmp;
 import std.datetime.stopwatch : StopWatch;
 import std.datetime : Duration;
+import gogga;
 
 /**
 * Route
@@ -18,6 +19,7 @@ public final class Route
     //private __gshared Identity d;
     private string address;
     private Address nexthop;
+    private string nexthopIdentity;
     private uint metric;
 
     /**
@@ -27,11 +29,12 @@ public final class Route
     private long timeout;
     private StopWatch updateTime;
     
-    this(string address, Address nexthop, long timeout = 100, uint metric = 64)
+    this(string address, Address nexthop, string nexthopIdentity, long timeout = 100, uint metric = 64)
     {
         this.address = address;
         this.nexthop = nexthop;
         this.timeout = timeout;
+        this.nexthopIdentity = nexthopIdentity;
         this.metric = metric;
 
         /* Start the stop watch */
@@ -52,6 +55,11 @@ public final class Route
     public Address getNexthop()
     {
         return nexthop;
+    }
+
+    public string getNexthopIdentity()
+    {
+        return nexthopIdentity;
     }
 
     public uint getMetric()
@@ -149,11 +157,36 @@ public final class Table
         }
 
         routes ~= route;
+        gprintln("Added route "~to!(string)(route));
         
         no_add_route:
 
         /* Unlock the routing table */
         routeLock.unlock();
+    }
+
+    public Route lookup(string address)
+    {
+        /* The matched route (if any) */
+        Route match;
+
+        /* Lock the routing table */
+        routeLock.lock();
+
+        /* Add the route (only if it doesn't already exist) */
+        foreach(Route route; routes)
+        {
+            /* FIXME: Make sure nexthop matches as well */
+            if(cmp(route.getAddress(), address) == 0)
+            {
+                match = route;
+            }
+        }
+
+        /* Unlock the routing table */
+        routeLock.unlock();
+
+        return match;
     }
 
     /**
