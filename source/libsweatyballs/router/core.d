@@ -96,6 +96,7 @@ public final class Router : Thread
             if(route.isExpired())
             {
                 routingTable.removeRoute(route);
+                gprintln("Expired route "~to!(string)(route)~", removing...", DebugType.WARNING);
             }
         }
     }

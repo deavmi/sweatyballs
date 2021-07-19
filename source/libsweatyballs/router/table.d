@@ -4,7 +4,8 @@ import std.socket : Address;
 import core.sync.mutex : Mutex;
 import std.conv : to;
 import std.string : cmp;
-import std.datetime.systime : Clock, SysTime;
+import std.datetime.stopwatch : StopWatch;
+import std.datetime : Duration;
 
 /**
 * Route
@@ -20,21 +21,23 @@ public final class Route
     * TODO: Set these and add a loop watcher to
     * the table
     */
-    private ubyte timeout;
-    private SysTime updateTime;
+    private long timeout;
+    private StopWatch updateTime;
     
-    this(string address, Address nexthop, ubyte timeout = 100)
+    this(string address, Address nexthop, long timeout = 100)
     {
         this.address = address;
         this.nexthop = nexthop;
+        this.timeout = timeout;
 
-        refreshTime();
+        /* Start the stop watch */
+        updateTime.start();
     }
 
     public void refreshTime()
     {
-        /* Set the creation/updated time */
-        updateTime = Clock.currTime();
+        /* Reset the timer */
+        updateTime.reset();
     }
 
     public string getAddress()
@@ -49,14 +52,24 @@ public final class Route
 
     public override string toString()
     {
-        return "Route (To: "~address~", Via: "~to!(string)(nexthop)~")";
+        return "Route (To: "~address~", Via: "~to!(string)(nexthop)~", Age: "~to!(string)(getAge())~")";
+    }
+
+    public long getAge()
+    {
+        Duration elapsedTime = updateTime.peek();
+        return elapsedTime.total!("seconds");
     }
 
     public bool isExpired()
     {
-        SysTime currentTime = Clock.currTime();
+        Duration elapsedTime = updateTime.peek();
+        import gogga;
+        gprintln(elapsedTime);
+        gprintln(elapsedTime.total!("seconds"));
+        gprintln(timeout);
 
-        return (currentTime.second()-updateTime.second()) > timeout;
+        return (elapsedTime.total!("seconds") >= timeout);
     }
 }
 

@@ -49,7 +49,7 @@ public final class Advertiser : Thread
                 advertise(link);
             }
 
-            sleep(dur!("seconds")(1));
+            sleep(dur!("seconds")(101));
         }
     }
 
@@ -72,6 +72,9 @@ public final class Advertiser : Thread
     * Sends to `ff02::1%<interface>:6666`
     *
     * TODO: Advertise self (we should insert our own route too perhaps or just do it here (eaiser))
+    *
+    * TODO: We should split advertisements up, depending on the number, into seperate
+    * advertisements
     */
     private void advertise(Link link)
     {
@@ -108,5 +111,16 @@ public final class Advertiser : Thread
 
         import std.conv : to;
         gprintln("Status"~to!(string)(stats));
+    }
+
+    /**
+    * Advertises the given `routes` on the given `link`
+    */
+    private void advertiseRoute(Link link, Route[] routes)
+    {
+        /* TODO: Implement me */
+
+
+        
     }
 }
