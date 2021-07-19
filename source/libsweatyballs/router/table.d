@@ -4,6 +4,7 @@ import std.socket : Address;
 import core.sync.mutex : Mutex;
 import std.conv : to;
 import std.string : cmp;
+import std.datetime.systime : Clock, SysTime;
 
 /**
 * Route
@@ -19,13 +20,21 @@ public final class Route
     * TODO: Set these and add a loop watcher to
     * the table
     */
-    private ulong timeout;
-    private string creationTime;
+    private ubyte timeout;
+    private SysTime updateTime;
     
-    this(string address, Address nexthop)
+    this(string address, Address nexthop, ubyte timeout = 100)
     {
         this.address = address;
         this.nexthop = nexthop;
+
+        refreshTime();
+    }
+
+    public void refreshTime()
+    {
+        /* Set the creation/updated time */
+        updateTime = Clock.currTime();
     }
 
     public string getAddress()
@@ -41,6 +50,13 @@ public final class Route
     public override string toString()
     {
         return "Route (To: "~address~", Via: "~to!(string)(nexthop)~")";
+    }
+
+    public bool isExpired()
+    {
+        SysTime currentTime = Clock.currTime();
+
+        return (currentTime.second()-updateTime.second()) > timeout;
     }
 }
 
@@ -107,6 +123,9 @@ public final class Table
         {
             if(cmp(cRoute.getAddress(), route.getAddress()) == 0)
             {
+                /* Refresh the route */
+                cRoute.refreshTime();
+                
                 goto no_add_route;
             }
         }

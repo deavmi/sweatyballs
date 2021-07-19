@@ -7,6 +7,7 @@ import core.sync.mutex : Mutex;
 import libsweatyballs.engine.configuration : Config;
 import std.conv : to;
 import gogga;
+import core.thread : Thread;
 
 /* TODO: Import for config thing */
 
@@ -15,7 +16,7 @@ import gogga;
 *
 * Description: TODO
 */
-public final class Engine
+public final class Engine : Thread
 {
     /**
     * Network components
@@ -40,6 +41,9 @@ public final class Engine
     */
     this(Config config)
     {
+        /* TODO: Add comment */
+        super(&worker);
+
         /* TODO: Read config */
         parseConfig(config);
 
@@ -91,6 +95,14 @@ public final class Engine
         return router;
     }
 
+    private void worker()
+    {
+        while(true)
+        {
+
+        }
+    }
+
     private Link[] createLinks(string[] interfaces)
     {
         Link[] createdLinks;
@@ -116,6 +128,9 @@ public final class Engine
 
     public void launch()
     {
+        /* Start the engine */
+        start();
+
         /* Start router */
         router.launch();
 
@@ -126,7 +141,5 @@ public final class Engine
         /* TODO: Add me */
 
         gprintln("Engine has started all threads and is now going to finish and return to constructor thread control");
-        
-        /* TODO: Maybe create Engine thread or all user to do that */
     }
 }
