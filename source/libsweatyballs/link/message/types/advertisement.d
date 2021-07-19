@@ -15,5 +15,13 @@ class AdvertisementMessage
 
 class RouteEntry
 {
-    @Proto(1) string address = protoDefaultValue!string;
+    @Proto(1) RouteCommand command = protoDefaultValue!RouteCommand;
+    @Proto(2) string address = protoDefaultValue!string;
+    @Proto(3) uint metric = protoDefaultValue!uint;
+}
+
+enum RouteCommand
+{
+    ADD = 0,
+    REMOVE = 1,
 }
