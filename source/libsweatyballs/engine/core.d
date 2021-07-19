@@ -7,7 +7,8 @@ import core.sync.mutex : Mutex;
 import libsweatyballs.engine.configuration : Config;
 import std.conv : to;
 import gogga;
-import core.thread : Thread;
+import core.thread : Thread, dur;
+import libsweatyballs.router.table : Route;
 
 /* TODO: Import for config thing */
 
@@ -95,11 +96,25 @@ public final class Engine : Thread
         return router;
     }
 
+    public Switch getSwitch()
+    {
+        return zwitch;
+    }
+
     private void worker()
     {
         while(true)
         {
+            /**
+            * FIXME: Remove this, this is just testing code
+            */
+            Route[] routes = router.getTable().getRoutes();
+            foreach(Route route; routes)
+            {
+                zwitch.sendPacket(route.getAddress(), cast(byte[])"Hello world");    
+            }
 
+            Thread.sleep(dur!("seconds")(10));
         }
     }
 
