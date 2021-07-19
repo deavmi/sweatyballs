@@ -54,7 +54,7 @@ public final class Route
 
     public override string toString()
     {
-        return "Route (To: "~address~", Via: "~to!(string)(nexthop)~", Age: "~to!(string)(getAge())~")";
+        return "Route (To: "~address~", Via: "~to!(string)(nexthop)~", Metric: "~to!(string)(metric)~", Age: "~to!(string)(getAge())~")";
     }
 
     public long getAge()
