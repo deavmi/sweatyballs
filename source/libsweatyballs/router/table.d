@@ -16,6 +16,7 @@ public final class Route
 {
     private string address;
     private Address nexthop;
+    private uint metric;
 
     /**
     * TODO: Set these and add a loop watcher to
@@ -24,11 +25,12 @@ public final class Route
     private long timeout;
     private StopWatch updateTime;
     
-    this(string address, Address nexthop, long timeout = 100)
+    this(string address, Address nexthop, long timeout = 100, uint metric = 64)
     {
         this.address = address;
         this.nexthop = nexthop;
         this.timeout = timeout;
+        this.metric = metric;
 
         /* Start the stop watch */
         updateTime.start();
