@@ -11,5 +11,8 @@
 	},
 	"description": "Next-hop routing with crypto",
 	"license": "GPLv3",
-	"name": "sweatyballs"
+	"name": "sweatyballs",
+	"preBuildCommands": ["protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/session.proto --d_out=source/libsweatyballs/link/message/types/.",
+		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/advertisement.proto --d_out=source/libsweatyballs/link/message/types/.",
+		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/packet.proto --d_out=source/libsweatyballs/link/message/types/."]
 }
