@@ -139,6 +139,30 @@ public final class Table
         routeLock.unlock();
     }
 
+    /**
+    * Remove a route 
+    */
+    public void removeRoute(Route route)
+    {
+        /* New routing table */
+        Route[] newRoutes;
 
-    /* TODO; Remove route */
+        /* Lock the routing table */
+        routeLock.lock();
+
+        /* Add the route (only if it doesn't already exist) */
+        foreach(Route cRoute; routes)
+        {
+            /* FIXME: Make sure nexthop matches as well */
+            if(cmp(cRoute.getAddress(), route.getAddress()) != 0)
+            {
+                newRoutes ~= cRoute;
+            }
+        }
+
+        routes = newRoutes;
+
+        /* Unlock the routing table */
+        routeLock.unlock();
+    }
 }
