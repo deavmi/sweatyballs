@@ -29,4 +29,6 @@ message RouteEntry
 
     // Address this is a route to
     string address = 2;
+
+    uint metric;
 }
