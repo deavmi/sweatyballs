@@ -22,6 +22,11 @@ public final class Neighbor
         return identity;
     }
 
+    public Address getAddress()
+    {
+        return address;
+    }
+
     public override string toString()
     {
         return "NBR ("~identity~") ["~to!(string)(address)~"]";
