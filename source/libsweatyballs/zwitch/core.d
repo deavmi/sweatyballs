@@ -10,6 +10,7 @@ import std.conv : to;
 import gogga;
 import std.socket;
 import libsweatyballs.router.table : Route;
+import libsweatyballs.link.message.core;
 
 /**
 * Switch
@@ -130,6 +131,23 @@ public final class Switch : Thread
         }
 
         return match;
+    }
+
+
+    private Packet constructPacket(string toAddress, string fromAddress, byte[] data)
+    {
+        /* The final message */
+        Packet packet = new Packet();
+        packet.fromKey = fromAddress;
+        packet.toKey = toAddress;
+        packet.siganture = "not yet implemented";
+        /* TODO: Generate signature */
+
+        /* Encrypt the payload to `toAddress` (final destination) */
+        ubyte[] encryptedPayload = RSA.encrypt(toAddress, cast(ubyte[])data);
+        packet.payload = encryptedPayload;
+
+        return packet;
     }
 
     /**
