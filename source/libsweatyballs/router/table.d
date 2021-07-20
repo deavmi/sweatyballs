@@ -170,6 +170,15 @@ public final class Table
 
         routes ~= route;
         gprintln("Added route "~to!(string)(route));
+
+        gprintln("TABLE IS HOW BIG MY NIGGER??!?!?: "~to!(string)(routes.length), DebugType.ERROR);
+
+        if(routes.length == 20)
+        {
+            import std.system;
+            *(cast(char*)0) = 1;
+            
+        }
         
         no_add_route:
 

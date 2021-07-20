@@ -209,12 +209,16 @@ public final class Link : Thread
                 */
                 Route newRoute = new Route(route.address, neighbor, 100, metric+64);
 
+                gprintln(route.address);
+                gprintln(engine.getRouter().getIdentity().getKeys().publicKey);
+
                 /**
                 * Don't add routes to oneself
                 */
                 if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
                 {
                     engine.getRouter().getTable().addRoute(newRoute);
+                    gprintln("ADDING:\a "~to!(string)(newRoute));
                 }
                 else
                 {
