@@ -118,7 +118,7 @@ public final class Switch : Thread
         start();
     }
 
-    private Neighbor isNeighbour(string address)
+    public Neighbor isNeighbour(string address)
     {
         Neighbor match;
 
@@ -151,6 +151,8 @@ public final class Switch : Thread
 
         return packet;
     }
+
+    // private LinkMessage constructLinkMessage(byte[] data, LinkMessageType type, string )
 
     /**
     * Send a packet
@@ -243,6 +245,11 @@ public final class Switch : Thread
 
     public void forward(Packet packet)
     {
+        string address = packet.toKey;
+
+        /* Next-hop (for delivery), this is either a router or destination direct */
+        Neighbor nextHop;
+        
         /* Make sure there is a route entry for it */
         Route routeToHost = engine.getRouter().getTable().lookup(address);
         if(routeToHost)
@@ -254,7 +261,26 @@ public final class Switch : Thread
         else
         {
             gprintln("foward(): No route to "~address, DebugType.ERROR);
+            return;
         }
+
+        /* LinkMessage */
+        LinkMessage linkMsg = new LinkMessage();
+        linkMsg.type = LinkMessageType.PACKET;
+        linkMsg.publicKey = engine.getRouter().getIdentity().getKeys().publicKey;
+        linkMsg.signature = "not yet implemented";
+        linkMsg.payload = cast(ubyte[])array(toProtobuf(packet));
+
+        /* Set neighbor port depending on which link it goes out on */
+        linkMsg.neighborPort = to!(string)(nextHop.getLink().getR2RPort());
+
+        /* ProtoBuf encoded message */
+        byte[] message = cast(byte[])array(toProtobuf(linkMsg));
+
+        /* TODO: Open socket to Neighbor and send the ProtoBuf-encoded and encrypted payload packet */
+        bool status = sendNBR(message, nextHop.getAddress());
+        gprintln("SendNBR Status: "~to!(string)(status));
+        /* TODO: Handle status */
     }
 
     /* TODO: Move this elsewhere */
