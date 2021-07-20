@@ -74,7 +74,7 @@ public final class Advertiser : Thread
     private link.Advertisement makeAdvertisement(Link link, Route[] routes)
     {
         /* The advertisement message */
-        Advertisement advMsg;
+        Advertisement advMsg = new Advertisement();
 
         /**
         * Construct RouteEntry's
@@ -90,6 +90,9 @@ public final class Advertiser : Thread
             /* Add to list of RouteEntry-s */
             entries ~= newRouteEntry;
         }
+
+        /* Set entries */
+        advMsg.routes = entries;
 
         return advMsg;
     }
