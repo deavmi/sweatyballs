@@ -131,7 +131,7 @@ public final class Engine : Thread
                 zwitch.sendPacket(route.getAddress(), cast(byte[])"Hello world");    
             }
 
-            Thread.sleep(dur!("seconds")(5));
+            Thread.sleep(dur!("seconds")(1));
         }
     }
 

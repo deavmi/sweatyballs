@@ -237,7 +237,7 @@ public final class Link : Thread
                 {
                     gprintln("PACKET IS ACCEPTED TO ME", DebugType.WARNING);
 
-                    bool stat = engine.getSwitch().isNeighbour(packet.fromKey) is null;
+                    bool stat = engine.getSwitch().isNeighbour(packet.fromKey) !is null;
                     gprintln("WasPacketFromNeighbor: "~to!(string)(stat), DebugType.WARNING);
                 }
                 /* If it is not destined to me then forward it */
