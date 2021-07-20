@@ -84,6 +84,15 @@ public final class Route
         Duration elapsedTime = updateTime.peek();
         return (elapsedTime.total!("seconds") >= timeout) && ageibility;
     }
+
+    public override bool opEquals(Object other)
+    {
+        Route otherRoute = cast(Route)other;
+
+        /* TODO: Add other comparators such as next hops */
+
+        return cmp(otherRoute.getAddress(), this.getAddress()) == 0;
+    }
 }
 
 /**
@@ -148,7 +157,7 @@ public final class Table
         foreach(Route cRoute; routes)
         {
             /* FIXME: Make sure nexthop matches as well */
-            if(cmp(cRoute.getAddress(), route.getAddress()) == 0)
+            if(cRoute == route)
             {
                 /* Refresh the route */
                 cRoute.refreshTime();
