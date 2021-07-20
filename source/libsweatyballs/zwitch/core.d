@@ -177,6 +177,16 @@ public final class Switch : Thread
         /* Encrypt the payload to `address` */
         ubyte[] encryptedPayload = RSA.encrypt(address, cast(ubyte[])data);
 
+
+        /* ProtoBuf encoded message */
+        byte[] message;
+
+        /* TODO: Open socket to Neighbor and send the ProtoBuf-encoded and encrypted payload packet */
+        /* TODO: Failure to open socket */
+        Socket neighborSocket = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+        long status = neighborSocket.sendTo(message, nextHop.getAddress());
+        /* TODO: Handle status */
+
     }
 
     /* TODO: Move this elsewhere */
