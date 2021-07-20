@@ -217,8 +217,19 @@ public final class Link : Thread
                 */
                 if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
                 {
-                    engine.getRouter().getTable().addRoute(newRoute);
-                    gprintln("ADDING:\a "~to!(string)(newRoute));
+                    /**
+                    * Don;t add routes we advertised (from ourself) - this
+                    * ecludes self route checked before entering here
+                    */
+                    if(newRoute.getNexthop().getIdentity() != engine.getRouter().getIdentity().getKeys().publicKey)
+                    {
+                        engine.getRouter().getTable().addRoute(newRoute);
+                    }
+                    else
+                    {
+                        gprintln("Not adding a route that originated from us", DebugType.ERROR);
+                    }
+                
                 }
                 else
                 {
