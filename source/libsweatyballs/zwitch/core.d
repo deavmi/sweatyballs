@@ -168,7 +168,9 @@ public final class Switch : Thread
         linkMsg.type = LinkMessageType.PACKET;
         linkMsg.publicKey = engine.getRouter().getIdentity().getKeys().publicKey;
         linkMsg.signature = "not yet implemented";
-        linkMsg.payload = cast(ubyte[])array(toProtobuf(packet));
+        // linkMsg.payload = cast(ubyte[])array(toProtobuf(packet));
+         ubyte[] encryptedPayload = RSA.encrypt(address, cast(ubyte[])data);
+        linkMsg.payload = encryptedPayload;
         
         /* Next-hop (for delivery), this is either a router or destination direct */
         Neighbor nextHop;

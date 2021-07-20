@@ -213,7 +213,15 @@ public final class Link : Thread
         /* Handle session messages */
         else if(mType == link.LinkMessageType.PACKET)
         {
-            gprintln("Henlo chuief", DebugType.WARNING);
+            gprintln("Woohoo! PACKET received!", DebugType.WARNING);
+
+            gprintln("Payload (encrypted): "~cast(string)(msgPayload));
+
+
+            /* Attempt decrypting with my key */
+            import crypto.rsa;
+            ubyte[] decryptedPayload = RSA.decrypt(engine.getRouter().getIdentity().getKeys().privateKey, msgPayload);
+            gprintln("Payload (decrypted): "~cast(string)(decryptedPayload));
         }
         /* TODO: Does protobuf throw en error if so? */
         else
