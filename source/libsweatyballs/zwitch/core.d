@@ -11,6 +11,8 @@ import gogga;
 import std.socket;
 import libsweatyballs.router.table : Route;
 import libsweatyballs.link.message.core;
+import std.array : array;
+import google.protobuf;
 
 /**
 * Switch
@@ -154,13 +156,23 @@ public final class Switch : Thread
     * Send a packet
     *
     * Send a packet containing `data` to node at `address`
+    * from `us`
     */
     public void sendPacket(string address, byte[] data)
     {
+        /* Construct the packet */
+        Packet packet = constructPacket(address, engine.getRouter().getIdentity().getKeys().publicKey, data);
+
+        /* LinkMessage */
+        LinkMessage linkMsg = new LinkMessage();
+        linkMsg.type = LinkMessageType.PACKET;
+        linkMsg.publicKey = engine.getRouter().getIdentity().getKeys().publicKey;
+        linkMsg.signature = "not yet implemented";
+        linkMsg.payload = cast(ubyte[])array(toProtobuf(packet));
+        
         /* Next-hop (for delivery), this is either a router or destination direct */
         Neighbor nextHop;
 
-        /* Construct a Datapacket */
 
         /* Find out whether `address` is local (a neighbour) or not */
         Neighbor possibleNeighbor = isNeighbour(address);
@@ -193,19 +205,18 @@ public final class Switch : Thread
 
         /* TODO: Add signature */
 
-        /* Encrypt the payload to `address` (final destination) */
-        ubyte[] encryptedPayload = RSA.encrypt(address, cast(ubyte[])data);
-
         import libsweatyballs.link.message.core;
 
-        LinkMessage d;
-
+        
+        /* Set neighbor port depending on which link it goes out on */
+        linkMsg.neighborPort = to!(string)(nextHop.getLink().getR2RPort());
 
         /* ProtoBuf encoded message */
-        byte[] message;
+        byte[] message = cast(byte[])array(toProtobuf(linkMsg));
 
         /* TODO: Open socket to Neighbor and send the ProtoBuf-encoded and encrypted payload packet */
         bool status = sendNBR(message, nextHop.getAddress());
+        gprintln("SendNBR Status: "~to!(string)(status));
         /* TODO: Handle status */
     }
 

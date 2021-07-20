@@ -32,16 +32,14 @@ public final class Link : Thread
     private Mutex inQueueLock;
     private Mutex outQueueLock;
 
-    /**
-    * Sockets
-    */
-    private Socket mcastSock;
-    private Socket r2rSock;
-
     private string interfaceName;
 
 
     private Engine engine;
+
+
+    private Watcher advWatch;
+    private Watcher neighWatch;
 
     this(string interfaceName, Engine engine)
     {
@@ -54,8 +52,8 @@ public final class Link : Thread
         /* Initialize locks */
         initMutexes();
 
-        /* Setup networking */
-        setupSockets();
+        /* Setup watchers */
+        setupWatchers();
     }
 
     public string getInterface()
@@ -73,17 +71,25 @@ public final class Link : Thread
     }
 
     /**
-    * Sets up sockets
+    * Sets up watchers, one for advertisements and one for
+    * nieghbor-to-neighbor communications
     */
-    private void setupSockets()
+    private void setupWatchers()
     {
         /* Setup the advertisement socket (bound to ff02::1%interface) port 6666 */
-        mcastSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+        Socket mcastSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
         mcastSock.bind(parseAddress("ff02::1%"~getInterface(), 6666));
 
+        /* Setup the advertisement watcher */
+        advWatch = new Watcher(this, mcastSock);
+
+
         /* Setup the router-to-router socket (bound to ::) port 6667 */
-        r2rSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
-        r2rSock.bind(parseAddress("::", 0));
+        Socket neighSock = new Socket(AddressFamily.INET6, SocketType.DGRAM, ProtocolType.UDP);
+        neighSock.bind(parseAddress("::", 0));
+
+        /* Setup the neighbor watcher */
+        neighWatch = new Watcher(this, neighSock);
     }
 
     /**
@@ -91,7 +97,7 @@ public final class Link : Thread
     */
     public ushort getR2RPort()
     {
-        return to!(ushort)(r2rSock.localAddress.toPortString());
+        return neighWatch.getPort();
     }
 
     /**
@@ -105,43 +111,22 @@ public final class Link : Thread
         {
 
             /**
-            * MSG_PEEK, we don't want to dequeue this message yet but need to call receive
-            * MSG_TRUNC, return the number of bytes of the datagram even when
-            * bigger than passed in array
+            * Check if there are any LinkUnit's to be processed
+            * then process them
             */
-            SocketFlags flags;
-            flags |= MSG_TRUNC;
-            flags |= MSG_PEEK;
-
-            /* Receive buffer */
-            byte[] data;
-            Address address;
-
-            /* Empty array won't work */
-            data.length = 1;
-            
-            gprintln("Awaiting message...");
-            long len = mcastSock.receiveFrom(data, flags, address);
-
-            if(len <= 0)
+            // gprintln(hasInQueue());
+        
+            if(hasInQueue())
             {
-                /* TODO: Error handling */
-            }
-            else
-            {
-                /* Receive at the length found */
-                data.length = len;
-                mcastSock.receiveFrom(data, address);
-
-                /* Decode the message */
-                link.LinkMessage message = decode(data);
-
-                /* Couple Address-and-message */
-                LinkUnit unit = new LinkUnit(address, message);
+                /* Pop off a message */
+                LinkUnit unit = popInQueue();
 
                 /* Process message */
                 process(unit); 
+
+                gprintln("Pablo");
             }
+
             
         }
     }
@@ -195,7 +180,7 @@ public final class Link : Thread
         * Enter the Neighbor details into the Switch
         */
         Address neighborAddress = getNeighborIPAddress(sender, neighborPort);
-        Neighbor neighbor = new Neighbor(identity, neighborAddress);
+        Neighbor neighbor = new Neighbor(identity, neighborAddress, this);
         engine.getSwitch().addNeighbor(neighbor);
 
 
@@ -228,7 +213,7 @@ public final class Link : Thread
         /* Handle session messages */
         else if(mType == link.LinkMessageType.PACKET)
         {
-
+            gprintln("Henlo chuief", DebugType.WARNING);
         }
         /* TODO: Does protobuf throw en error if so? */
         else
@@ -237,14 +222,21 @@ public final class Link : Thread
         }
     }
 
-    public link.LinkMessage decode(byte[] data)
+    public static LinkMessage decode(byte[] data)
     {
-        ubyte[] dataIn = cast(ubyte[])data;
-        link.LinkMessage message = fromProtobuf!(link.LinkMessage)(dataIn);
-        return message;
+        try
+        {
+            ubyte[] dataIn = cast(ubyte[])data;
+            LinkMessage message = fromProtobuf!(LinkMessage)(dataIn);
+            return message;
+        }
+        catch(ProtobufException)
+        {
+            return null;
+        }
     }
 
-    private void enqueueIn(LinkUnit unit)
+    public void enqueueIn(LinkUnit unit)
     {
         /* Add to the in-queue */
         inQueueLock.lock();
@@ -301,6 +293,9 @@ public final class Link : Thread
     public void launch()
     {
         start();
+
+        advWatch.start();
+        neighWatch.start();
     }
 
 
@@ -308,7 +303,7 @@ public final class Link : Thread
     /**
     * Blocks to receive one message from the incoming queue
     */
-    public link.LinkMessage receive()
+    public LinkMessage receive()
     {
         /* TODO: Implement me */
         return null;
@@ -317,8 +312,93 @@ public final class Link : Thread
     /**
     * Sends a message
     */
-    public void send(link.LinkMessage message, string recipient)
+    public void send(LinkMessage message, string recipient)
     {
         /* TODO: Implement me */
+    }
+}
+
+/**
+* Watcher
+*
+* Given a socket this will dequeue message, decode them and pass
+* them up to the Link for processing
+*/
+public final class Watcher : Thread
+{
+    private Socket socket;
+    private Link link;
+
+    this(Link link,  Socket socket)
+    {
+        super(&worker);
+        this.link = link;
+        this.socket = socket;
+    }
+
+    public ushort getPort()
+    {
+        return to!(ushort)(socket.localAddress.toPortString());
+    }
+
+    /**
+    * Listens for advertisements
+    *
+    * TODO: We also must listen for traffic here though
+    */
+    private void worker()
+    {
+        while(true)
+        {
+
+            /**
+            * MSG_PEEK, we don't want to dequeue this message yet but need to call receive
+            * MSG_TRUNC, return the number of bytes of the datagram even when
+            * bigger than passed in array
+            */
+            SocketFlags flags;
+            flags |= MSG_TRUNC;
+            flags |= MSG_PEEK;
+
+            /* Receive buffer */
+            byte[] data;
+            Address address;
+
+            /* Empty array won't work */
+            data.length = 1;
+            
+            gprintln("Awaiting message...");
+            long len = socket.receiveFrom(data, flags, address);
+
+            if(len <= 0)
+            {
+                /* TODO: Error handling */
+            }
+            else
+            {
+                /* Receive at the length found */
+                data.length = len;
+                socket.receiveFrom(data, address);
+
+                /* Decode the message */
+                LinkMessage message = Link.decode(data);
+
+                /* If decoding worked */
+                if(message)
+                {
+                    /* Couple Address-and-message */
+                    LinkUnit unit = new LinkUnit(address, message);
+
+                    /* Process message */
+                    link.enqueueIn(unit); 
+                }
+                /* If ProtocolBuffer decoding failed */
+                else
+                {
+                    gprintln("Watcher: ProtocolBuffer decode failed", DebugType.ERROR);
+                }
+            }
+            
+        }
     }
 }
