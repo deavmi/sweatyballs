@@ -223,7 +223,31 @@ public final class Link : Thread
                     */
                     if(newRoute.getNexthop().getIdentity() != engine.getRouter().getIdentity().getKeys().publicKey)
                     {
-                        engine.getRouter().getTable().addRoute(newRoute);
+                        /**
+                        * TODO: Found it, only install routes if their updated metric on arrival is lesser than current route
+                        * TODO: Search for existing route
+                        * TODO: This might make above constraints nmeaningless, or well atleast the one above me (outer one not me thinks)
+                        */
+                        Route possibleExistingRoute = engine.getRouter().getTable().lookup(route.address);
+
+                        /* If no route exists then add it */
+                        if(!possibleExistingRoute)
+                        {
+                            engine.getRouter().getTable().addRoute(newRoute);
+                        }
+                        /* If a route exists only install it if current one has higher metric than advertised one */
+                        else
+                        {
+                            if(possibleExistingRoute.getMetric() > newRoute.getMetric())
+                            {
+                                /* Remove the old one (higher metric than advertised route) */
+                                engine.getRouter().getTable().removeRoute(possibleExistingRoute);
+
+                                /* Install the advertised route (lower metric than currently installed route) */
+                                engine.getRouter().getTable().addRoute(newRoute);
+                            }
+                        }
+                        
                     }
                     else
                     {
