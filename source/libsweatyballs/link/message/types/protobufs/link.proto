@@ -1,0 +1,51 @@
+syntax="proto3";
+
+//LinkMessage
+//
+//This represents a message sent between two nodes directly
+message LinkMessage
+{
+    LinkMessageType type = 1;
+    bytes message = 2;
+}
+
+enum LinkMessageType
+{
+    ADVERTISEMENT = 0;
+    PACKET = 1;
+
+}
+
+
+//Advertisement
+//
+//Advertisement of a router
+message Advertisement
+{
+    string neighborPort = 1;
+    repeated RouteEntry routes = 2;
+}
+
+
+message RouteEntry
+{
+    
+
+    // Address this is a route to
+    string address = 1;
+
+    uint32 metric = 2;
+
+    //Add perhaps siganture?
+}
+
+//Packet
+//
+//Represents a general packet to be sent
+message Packet
+{
+    string fromKey = 1;
+    string toKey = 2;
+    string siganture = 3;
+    bytes payload = 4;
+}

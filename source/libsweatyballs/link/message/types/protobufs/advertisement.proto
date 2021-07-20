@@ -5,30 +5,3 @@
 
 // Set the version of ProtocolBuffer
 syntax="proto3";
-
-message AdvertisementMessage
-{
-    //Port to connect to for router to router interface on this link
-    string r2rPort = 1;
-
-    // The routes in this advertisement
-    repeated RouteEntry routes = 2;
-}
-
-// Whether or not the route should be removed
-// or added
-enum RouteCommand
-{
-    ADD = 0;
-    REMOVE = 1;
-}
-
-message RouteEntry
-{
-    RouteCommand command = 1;
-
-    // Address this is a route to
-    string address = 2;
-
-    uint32 metric = 3;
-}
