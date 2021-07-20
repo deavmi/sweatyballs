@@ -11,6 +11,8 @@ class LinkMessage
 {
     @Proto(1) LinkMessageType type = protoDefaultValue!LinkMessageType;
     @Proto(2) bytes message = protoDefaultValue!bytes;
+    @Proto(3) string publicKey = protoDefaultValue!string;
+    @Proto(4) string signature = protoDefaultValue!string;
 }
 
 class Advertisement

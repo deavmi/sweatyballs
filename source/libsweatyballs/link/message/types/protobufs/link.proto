@@ -7,6 +7,10 @@ message LinkMessage
 {
     LinkMessageType type = 1;
     bytes message = 2;
+
+    //TODO: Use these
+    string publicKey = 3;
+    string signature = 4;
 }
 
 enum LinkMessageType
