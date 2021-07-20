@@ -12,6 +12,7 @@ import std.conv : to;
 import google.protobuf;
 import libsweatyballs.router.table : Route;
 import libsweatyballs.zwitch.neighbor : Neighbor;
+import std.string : cmp;
 
 /**
 * Link
@@ -207,7 +208,18 @@ public final class Link : Thread
                 * Also set its metric to whatever it is +64
                 */
                 Route newRoute = new Route(route.address, neighbor, 100, metric+64);
-                engine.getRouter().getTable().addRoute(newRoute);
+
+                /**
+                * Don't add routes to oneself
+                */
+                if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
+                {
+                    engine.getRouter().getTable().addRoute(newRoute);
+                }
+                else
+                {
+                    gprintln("Skipping addition of self-route", DebugType.WARNING);
+                }
             }
         }
         /* Handle session messages */
