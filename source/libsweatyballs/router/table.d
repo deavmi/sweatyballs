@@ -91,7 +91,9 @@ public final class Route
 
         /* TODO: Add other comparators such as next hops */
 
-        return cmp(otherRoute.getAddress(), this.getAddress()) == 0;
+        return cmp(otherRoute.getAddress(), this.getAddress()) == 0 &&
+                otherRoute.getNexthop() == this.getNexthop() &&
+                otherRoute.getMetric() == this.getMetric();
     }
 }
 
@@ -214,7 +216,7 @@ public final class Table
         foreach(Route cRoute; routes)
         {
             /* FIXME: Make sure nexthop matches as well */
-            if(cmp(cRoute.getAddress(), route.getAddress()) != 0)
+            if(cRoute != route)
             {
                 newRoutes ~= cRoute;
             }
