@@ -1,7 +1,9 @@
 module libsweatyballs.engine.core;
 
 import libsweatyballs.router.core : Router;
+import libsweatyballs.router.table;
 import libsweatyballs.zwitch.core : Switch;
+import libsweatyballs.zwitch.neighbor;
 import libsweatyballs.link.core : Link;
 import core.sync.mutex : Mutex;
 import libsweatyballs.engine.configuration : Config;
@@ -9,6 +11,7 @@ import std.conv : to;
 import gogga;
 import core.thread : Thread, dur;
 import libsweatyballs.router.table : Route;
+import std.socket : Address, parseAddress;
 
 /* TODO: Import for config thing */
 
@@ -82,12 +85,26 @@ public final class Engine : Thread
         links = createLinks(config.links);
         setupLinks(links);
 
-        /* Setup a new Router */
+        /**
+        * Setup a new Router
+        */
         router = new Router(this, config.routerIdentity);
+        
+        
         
 
         /* Setup a new Switch */
         zwitch = new Switch(this);
+
+        /* Add self neighbor to any link (try the first, TODO: Atleast one link is needed) */
+        Address address = parseAddress("::", links[0].getR2RPort());
+        Neighbor selfNeighbor = new Neighbor(router.getIdentity().getKeys().publicKey, address, links[0]);
+
+
+        Route route = new Route(router.getIdentity().getKeys().publicKey, selfNeighbor);
+        route.setAgeibility(false);
+
+        router.getTable().addRoute(route);
         
     }
 

@@ -28,6 +28,8 @@ public final class Route
     */
     private long timeout;
     private StopWatch updateTime;
+
+    private bool ageibility = true;
     
     this(string address, Neighbor nexthop, long timeout = 100, uint metric = 64)
     {
@@ -61,6 +63,11 @@ public final class Route
         return metric;
     }
 
+    public void setAgeibility(bool age)
+    {
+        ageibility = age;
+    }
+
     public override string toString()
     {
         return "Route (To: "~address~", Via: "~to!(string)(nexthop)~", Metric: "~to!(string)(metric)~", Age: "~to!(string)(getAge())~")";
@@ -75,7 +82,7 @@ public final class Route
     public bool isExpired()
     {
         Duration elapsedTime = updateTime.peek();
-        return (elapsedTime.total!("seconds") >= timeout);
+        return (elapsedTime.total!("seconds") >= timeout) && ageibility;
     }
 }
 
