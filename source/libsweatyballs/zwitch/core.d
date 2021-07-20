@@ -196,6 +196,7 @@ public final class Switch : Thread
             else
             {
                 gprintln("sendPacket: No route to "~address, DebugType.ERROR);
+                return;
             }
         }
 
@@ -237,6 +238,22 @@ public final class Switch : Thread
         catch(SocketOSException)
         {
             return false;
+        }
+    }
+
+    public void forward(Packet packet)
+    {
+        /* Make sure there is a route entry for it */
+        Route routeToHost = engine.getRouter().getTable().lookup(address);
+        if(routeToHost)
+        {
+            /* Set the next hop to the neighbor with the address in the route entry */
+            nextHop = routeToHost.getNexthop();
+            gprintln("foward(): Next-hop (router): "~to!(string)(routeToHost));
+        }
+        else
+        {
+            gprintln("foward(): No route to "~address, DebugType.ERROR);
         }
     }
 
