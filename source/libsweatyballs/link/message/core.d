@@ -9,7 +9,4 @@ module libsweatyballs.link.message.core;
 /* TODO: Remove this (this is just to get this to compile) */
 alias ProtoBuf = string;
 
-public import advertisement;
-public import packet;
-public import session;
-
+public import link;
