@@ -21,7 +21,10 @@ enum MessageType
 // The message `type` and data `payload` are the last details.
 message Message
 {
-    // Cryptographic details
+    // Router header
+    //
+    //This includes information regarding the router
+    //sending this message
     string publicKey = 1;
     string signature = 2;
     uint32 neighborPort = 3;

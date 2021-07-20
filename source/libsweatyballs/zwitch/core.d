@@ -178,6 +178,10 @@ public final class Switch : Thread
         /* Encrypt the payload to `address` (final destination) */
         ubyte[] encryptedPayload = RSA.encrypt(address, cast(ubyte[])data);
 
+        import libsweatyballs.link.message.core;
+
+        Message d;
+
 
         /* ProtoBuf encoded message */
         byte[] message;
