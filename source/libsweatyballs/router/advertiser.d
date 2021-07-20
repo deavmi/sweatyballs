@@ -134,10 +134,15 @@ public final class Advertiser : Thread
         /**
         * Construct a LinkMessage with type=ADVERTISEMENT and
         * the encoded message above
+        *
+        * Set the public key to ours
+        * Set the signature (TODO)
         */
         link.LinkMessage linkMsg = new link.LinkMessage();
         linkMsg.type = link.LinkMessageType.ADVERTISEMENT;
         linkMsg.payload = array(toProtobuf(message));
+        linkMsg.publicKey = router.getIdentity().getKeys().publicKey;
+        // linkMsg.signature = 
 
         /* Encode the LinkMessage */
         byte[] messageBytes = cast(byte[])array(toProtobuf(linkMsg));
