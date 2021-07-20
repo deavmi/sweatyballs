@@ -10,14 +10,14 @@ enum protocVersion = 3014000;
 class LinkMessage
 {
     @Proto(1) LinkMessageType type = protoDefaultValue!LinkMessageType;
-    @Proto(2) bytes message = protoDefaultValue!bytes;
+    @Proto(2) bytes payload = protoDefaultValue!bytes;
     @Proto(3) string publicKey = protoDefaultValue!string;
     @Proto(4) string signature = protoDefaultValue!string;
+    @Proto(5) string neighborPort = protoDefaultValue!string;
 }
 
 class Advertisement
 {
-    @Proto(1) string neighborPort = protoDefaultValue!string;
     @Proto(2) RouteEntry[] routes = protoDefaultValue!(RouteEntry[]);
 }
 

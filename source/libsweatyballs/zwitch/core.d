@@ -160,7 +160,7 @@ public final class Switch : Thread
             if(routeToHost)
             {
                 /* Set the next hop to the neighbor with the address in the route entry */
-                nextHop = isNeighbour(routeToHost.getNexthopIdentity());
+                nextHop = routeToHost.getNexthop();
                 gprintln("sendPacket: Next-hop (indirect): "~to!(string)(routeToHost));
             }
             else
@@ -180,7 +180,7 @@ public final class Switch : Thread
 
         import libsweatyballs.link.message.core;
 
-        Message d;
+        LinkMessage d;
 
 
         /* ProtoBuf encoded message */

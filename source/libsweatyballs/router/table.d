@@ -7,6 +7,7 @@ import std.string : cmp;
 import std.datetime.stopwatch : StopWatch;
 import std.datetime : Duration;
 import gogga;
+import libsweatyballs.zwitch.neighbor;
 
 /**
 * Route
@@ -18,8 +19,7 @@ public final class Route
     // We must know our self-route and add it too somewhere
     //private __gshared Identity d;
     private string address;
-    private Address nexthop;
-    private string nexthopIdentity;
+    private Neighbor nexthop;
     private uint metric;
 
     /**
@@ -29,12 +29,11 @@ public final class Route
     private long timeout;
     private StopWatch updateTime;
     
-    this(string address, Address nexthop, string nexthopIdentity, long timeout = 100, uint metric = 64)
+    this(string address, Neighbor nexthop, long timeout = 100, uint metric = 64)
     {
         this.address = address;
         this.nexthop = nexthop;
         this.timeout = timeout;
-        this.nexthopIdentity = nexthopIdentity;
         this.metric = metric;
 
         /* Start the stop watch */
@@ -52,14 +51,9 @@ public final class Route
         return address;
     }
 
-    public Address getNexthop()
+    public Neighbor getNexthop()
     {
         return nexthop;
-    }
-
-    public string getNexthopIdentity()
-    {
-        return nexthopIdentity;
     }
 
     public uint getMetric()

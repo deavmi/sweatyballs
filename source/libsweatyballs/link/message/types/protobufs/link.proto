@@ -6,11 +6,12 @@ syntax="proto3";
 message LinkMessage
 {
     LinkMessageType type = 1;
-    bytes message = 2;
+    bytes payload = 2;
 
     //TODO: Use these
     string publicKey = 3;
     string signature = 4;
+    string neighborPort = 5;
 }
 
 enum LinkMessageType
@@ -26,7 +27,6 @@ enum LinkMessageType
 //Advertisement of a router
 message Advertisement
 {
-    string neighborPort = 1;
     repeated RouteEntry routes = 2;
 }
 

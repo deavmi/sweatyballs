@@ -74,19 +74,16 @@ public final class Advertiser : Thread
     private link.Advertisement makeAdvertisement(Link link, Route[] routes)
     {
         /* The advertisement message */
-        link.Advertisement advMsg;
-
-        /* Set the router-to-router port to the Link's one */
-        advMsg.neighborPort = link.getR2RPort();
+        Advertisement advMsg;
 
         /**
         * Construct RouteEntry's
         */
-        link.RouteEntry[] entries;
+        RouteEntry[] entries;
         foreach(Route route; routes)
         {
             /* Copy Route's data to a new RouteEntry */
-            RouteEntry newRouteEntry = new link.RouteEntry();
+            RouteEntry newRouteEntry = new RouteEntry();
             newRouteEntry.address = route.getAddress();
             newRouteEntry.metric = route.getMetric();
 
@@ -129,7 +126,7 @@ public final class Advertiser : Thread
         * Construct the Advertisement message for the given Link and
         * set of routes
         */
-        link.Advertisement advMsg = makeAdvertisement(link, routes);
+        Advertisement advMsg = makeAdvertisement(link, routes);
 
         /**
         * Construct a LinkMessage with type=ADVERTISEMENT and
@@ -137,11 +134,13 @@ public final class Advertiser : Thread
         *
         * Set the public key to ours
         * Set the signature (TODO)
+        * Set neighbor port
         */
-        link.LinkMessage linkMsg = new link.LinkMessage();
-        linkMsg.type = link.LinkMessageType.ADVERTISEMENT;
-        linkMsg.payload = array(toProtobuf(message));
+        LinkMessage linkMsg = new LinkMessage();
+        linkMsg.type = LinkMessageType.ADVERTISEMENT;
+        linkMsg.payload = array(toProtobuf(advMsg));
         linkMsg.publicKey = router.getIdentity().getKeys().publicKey;
+        linkMsg.neighborPort = to!(string)(link.getR2RPort());
         // linkMsg.signature = 
 
         /* Encode the LinkMessage */

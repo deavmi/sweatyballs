@@ -6,9 +6,9 @@ import std.socket : Address;
 public final class LinkUnit
 {
     private Address sender;
-    private packet.Message message;
+    private link.LinkMessage message;
 
-    this(Address sender, packet.Message message)
+    this(Address sender, link.LinkMessage message)
     {
         this.sender = sender;
         this.message = message;
@@ -19,7 +19,7 @@ public final class LinkUnit
         return sender;
     }
 
-    public packet.Message getMessage()
+    public link.LinkMessage getMessage()
     {
         return message;
     }

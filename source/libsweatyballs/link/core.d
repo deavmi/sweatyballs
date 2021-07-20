@@ -134,7 +134,7 @@ public final class Link : Thread
                 mcastSock.receiveFrom(data, address);
 
                 /* Decode the message */
-                packet.Message message = decode(data);
+                link.LinkMessage message = decode(data);
 
                 /* Couple Address-and-message */
                 LinkUnit unit = new LinkUnit(address, message);
@@ -169,18 +169,20 @@ public final class Link : Thread
         /**
         * Message details
         *
-        * 1. Public key
-        * 2. Signature
-        * 3. Neighbor port
-        * 4. Message type
+        * 1. Public key of Link Neighbor
+        * 2. Signature of Link Neighbor
+        * 3. Neighbor port of LinkNeighbor
+        * 4. Message type (also from LinkUnit address)
         * 5. Payload
         */
-        packet.Message message = unit.getMessage();
-
-        packet.MessageType mType = message.type;
+        link.LinkMessage message = unit.getMessage();
+        link.LinkMessageType mType = message.type;
         Address sender = unit.getSender();
         string identity = message.publicKey;
         ushort neighborPort = to!(ushort)(message.neighborPort);
+        ubyte[] msgPayload = message.payload;
+
+
         gprintln("Processing message from "~to!(string)(sender)~
                 " of type "~to!(string)(mType));
         gprintln("Public key: "~identity);
@@ -188,20 +190,21 @@ public final class Link : Thread
         gprintln("Neighbor Port: "~to!(string)(neighborPort));
 
 
-        ubyte[] msgPayload = message.payload;
 
-        /* Irrespective of the message type, add to NeighborDB */
+        /**
+        * Enter the Neighbor details into the Switch
+        */
         Address neighborAddress = getNeighborIPAddress(sender, neighborPort);
         Neighbor neighbor = new Neighbor(identity, neighborAddress);
         engine.getSwitch().addNeighbor(neighbor);
 
-        /* Handle route advertisements */
-        if(mType == packet.MessageType.ADVERTISEMENT)
-        {
-            advertisement.AdvertisementMessage advMsg = fromProtobuf!(advertisement.AdvertisementMessage)(msgPayload);
 
-            /* Get the router-to-router port for router who sent the advertisement */
-            ushort r2rPort = to!(ushort)(advMsg.r2rPort);
+
+
+        /* Handle route advertisements */
+        if(mType == link.LinkMessageType.ADVERTISEMENT)
+        {
+            link.Advertisement advMsg = fromProtobuf!(link.Advertisement)(msgPayload);
 
             /* Get the routes being advertised */
             RouteEntry[] routes = advMsg.routes;
@@ -212,20 +215,18 @@ public final class Link : Thread
             /* Add each route to the routing table */
             foreach(RouteEntry route; routes)
             {
-                /* Create a new Address(routerAddr, r2rPort) */
-                Address nexthop = parseAddress(sender.toAddrString(), r2rPort);
                 uint metric = route.metric;
 
                 /**
                 * Create a new route with `nexthop` as the nexthop address
                 * Also set its metric to whatever it is +64
                 */
-                Route newRoute = new Route(route.address, nexthop, identity, 100, metric+64);
+                Route newRoute = new Route(route.address, neighbor, 100, metric+64);
                 engine.getRouter().getTable().addRoute(newRoute);
             }
         }
         /* Handle session messages */
-        else if(mType == packet.MessageType.SESSION)
+        else if(mType == link.LinkMessageType.PACKET)
         {
 
         }
@@ -236,10 +237,10 @@ public final class Link : Thread
         }
     }
 
-    public packet.Message decode(byte[] data)
+    public link.LinkMessage decode(byte[] data)
     {
         ubyte[] dataIn = cast(ubyte[])data;
-        packet.Message message = fromProtobuf!(packet.Message)(dataIn);
+        link.LinkMessage message = fromProtobuf!(link.LinkMessage)(dataIn);
         return message;
     }
 
@@ -307,7 +308,7 @@ public final class Link : Thread
     /**
     * Blocks to receive one message from the incoming queue
     */
-    public packet.Message receive()
+    public link.LinkMessage receive()
     {
         /* TODO: Implement me */
         return null;
@@ -316,7 +317,7 @@ public final class Link : Thread
     /**
     * Sends a message
     */
-    public void send(packet.Message message, string recipient)
+    public void send(link.LinkMessage message, string recipient)
     {
         /* TODO: Implement me */
     }
