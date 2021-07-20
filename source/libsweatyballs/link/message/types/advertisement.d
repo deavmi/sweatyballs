@@ -6,22 +6,3 @@ module advertisement;
 import google.protobuf;
 
 enum protocVersion = 3014000;
-
-class AdvertisementMessage
-{
-    @Proto(1) string r2rPort = protoDefaultValue!string;
-    @Proto(2) RouteEntry[] routes = protoDefaultValue!(RouteEntry[]);
-}
-
-class RouteEntry
-{
-    @Proto(1) RouteCommand command = protoDefaultValue!RouteCommand;
-    @Proto(2) string address = protoDefaultValue!string;
-    @Proto(3) uint metric = protoDefaultValue!uint;
-}
-
-enum RouteCommand
-{
-    ADD = 0,
-    REMOVE = 1,
-}

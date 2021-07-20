@@ -67,6 +67,38 @@ public final class Advertiser : Thread
     }
 
     /**
+    * TODO: Move this elsehwre
+    *
+    * Given a publicKey, nexthop this generates the advertisement message
+    */
+    private link.Advertisement makeAdvertisement(Link link, Route[] routes)
+    {
+        /* The advertisement message */
+        link.Advertisement advMsg;
+
+        /* Set the router-to-router port to the Link's one */
+        advMsg.neighborPort = link.getR2RPort();
+
+        /**
+        * Construct RouteEntry's
+        */
+        link.RouteEntry[] entries;
+        foreach(Route route; routes)
+        {
+            /* Copy Route's data to a new RouteEntry */
+            RouteEntry newRouteEntry = new link.RouteEntry();
+            newRouteEntry.address = route.getAddress();
+            newRouteEntry.metric = route.getMetric();
+
+            /* Add to list of RouteEntry-s */
+            entries ~= newRouteEntry;
+        }
+
+        return advMsg;
+    }
+
+
+    /**
     * Send an IPv6 Multicast advertisement via link-local
     *
     * Sends to `ff02::1%<interface>:6666`
@@ -78,40 +110,25 @@ public final class Advertiser : Thread
     */
     private void advertise(Link link)
     {
-        /* Create advertisement message */
-        advertisement.AdvertisementMessage d = new  advertisement.AdvertisementMessage();
-        advertisement.RouteEntry[] entries;
-        advertisement.RouteEntry entry = new advertisement.RouteEntry();
-        entry.address = router.getIdentity().getKeys().publicKey;
-        entry.metric = 64;
-        entries ~= entry;
-        d.routes = entries;
-        d.r2rPort = to!(string)(link.getR2RPort());
-
-        /* get routes */
+        /**
+        * Construct the Advertisement message for the given Link and
+        * set fo routes
+        * TODO: Shard these
+        */
         Route[] routes = router.getTable().getRoutes();
-        foreach(Route route; routes)
-        {
-            advertisement.RouteEntry cEntry = new advertisement.RouteEntry();
-            cEntry.address = route.getAddress();
-            cEntry.metric = route.getMetric();
-            d.routes ~= cEntry;
-        }
+        link.Advertisement advMsg = makeAdvertisement(link, routes);
 
+        /**
+        * Construct a LinkMessage with type=ADVERTISEMENT and
+        * the encoded message above
+        */
+        link.LinkMessage linkMsg = new link.LinkMessage();
+        linkMsg.type = link.LinkMessageType.ADVERTISEMENT;
+        linkMsg.payload = array(toProtobuf(message));
 
-        /* Create Message */
-        packet.Message message = new packet.Message();
-        message.publicKey = router.getIdentity().getKeys().publicKey;
-        message.signature = "TODO";
-        message.type = packet.MessageType.ADVERTISEMENT;
-        message.payload = array(toProtobuf(d));
-
-        /* Encode the Message */
-        byte[] buff = cast(byte[])array(toProtobuf(message));
-
-        ulong stats = mcastSock.sendTo(buff, parseAddress("ff02::1%"~link.getInterface(), 6666));
-
-        import std.conv : to;
+        /* Encode the LinkMessage */
+        byte[] messageBytes = cast(byte[])array(toProtobuf(linkMsg));
+        ulong stats = mcastSock.sendTo(messageBytes, parseAddress("ff02::1%"~link.getInterface(), 6666));
         gprintln("Status"~to!(string)(stats));
     }
 
