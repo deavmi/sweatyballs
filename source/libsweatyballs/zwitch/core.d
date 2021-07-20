@@ -143,6 +143,7 @@ public final class Switch : Thread
         packet.fromKey = fromAddress;
         packet.toKey = toAddress;
         packet.siganture = "not yet implemented";
+        packet.ttl = 64;
         /* TODO: Generate signature */
 
         /* Encrypt the payload to `toAddress` (final destination) */
@@ -245,6 +246,14 @@ public final class Switch : Thread
 
     public void forward(Packet packet)
     {
+        /* Decrement ttl */
+        packet.ttl--;
+        if(packet.ttl == 0)
+        {
+            gprintln("TTL REACHED, DAAI DING IS DOOD!", DebugType.ERROR);
+            return;
+        }
+
         string address = packet.toKey;
 
         /* Next-hop (for delivery), this is either a router or destination direct */

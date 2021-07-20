@@ -33,6 +33,7 @@ class Packet
     @Proto(2) string toKey = protoDefaultValue!string;
     @Proto(3) string siganture = protoDefaultValue!string;
     @Proto(4) bytes payload = protoDefaultValue!bytes;
+    @Proto(5) ulong ttl = protoDefaultValue!ulong;
 }
 
 enum LinkMessageType

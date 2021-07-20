@@ -52,4 +52,5 @@ message Packet
     string toKey = 2;
     string siganture = 3;
     bytes payload = 4;
+    uint64 ttl = 5;
 }
