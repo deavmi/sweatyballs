@@ -80,7 +80,7 @@ public final class Router : Thread
                 routeInfo ~= routeInfo ~ to!(string)(route) ~ "\n";
             }
 
-            gprintln("<<<<<<< Routing table state >>>>>>>\n"~routeInfo);
+            gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
 
 
             sleep(dur!("seconds")(5));
