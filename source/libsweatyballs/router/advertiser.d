@@ -111,11 +111,24 @@ public final class Advertiser : Thread
     private void advertise(Link link)
     {
         /**
-        * Construct the Advertisement message for the given Link and
-        * set fo routes
-        * TODO: Shard these
+        * Advertise a set of routes over a link to all neighbors
+        * on said link
+        *
+        * TODO: Shard these (batch them)
         */
         Route[] routes = router.getTable().getRoutes();
+        advertiseRoute(link, routes);      
+    }
+
+    /**
+    * Advertises the given `routes` on the given `link`
+    */
+    private void advertiseRoute(Link link, Route[] routes)
+    {
+        /**
+        * Construct the Advertisement message for the given Link and
+        * set of routes
+        */
         link.Advertisement advMsg = makeAdvertisement(link, routes);
 
         /**
@@ -130,16 +143,5 @@ public final class Advertiser : Thread
         byte[] messageBytes = cast(byte[])array(toProtobuf(linkMsg));
         ulong stats = mcastSock.sendTo(messageBytes, parseAddress("ff02::1%"~link.getInterface(), 6666));
         gprintln("Status"~to!(string)(stats));
-    }
-
-    /**
-    * Advertises the given `routes` on the given `link`
-    */
-    private void advertiseRoute(Link link, Route[] routes)
-    {
-        /* TODO: Implement me */
-
-
-        
     }
 }
