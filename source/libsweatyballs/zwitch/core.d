@@ -26,7 +26,7 @@ import google.protobuf;
 public final class Switch : Thread
 {
     private Engine engine;
-    private Session[] sessions;
+    // private Session[] sessions;
 
     /**
     * Neighboring nodes
@@ -292,51 +292,6 @@ public final class Switch : Thread
         /* TODO: Handle status */
     }
 
-    /* TODO: Move this elsewhere */
-    public class Session : Thread
-    {
-        private string aesKey;
-        private string sessionID;
+   
 
-        private Socket neighborSock;
-
-        this(Socket clientSocket)
-        {
-            super(&worker);
-            this.neighborSock = neighborSock;
-        }
-
-        private void worker()
-        {
-
-        }
-    }
-
-    private Session fetchSession(string address)
-    {
-        return null;
-    }
-
-    private Session createSession(string address)
-    {
-        /* TODO: Generate random AES key */
-
-        return null;
-    }
-
-    private bool isSessionExists(string address)
-    {
-        /* Lock sessions */
-
-        /* Find the session */
-        foreach(Session session; sessions)
-        {
-
-        }
-
-
-        /* Unlockk sessions */
-
-        return true;
-    }
 }
