@@ -2,13 +2,15 @@ module libsweatyballs.link.unit;
 
 import libsweatyballs.link.message.core;
 import std.socket : Address;
+import libsweatyballs.link.core : Link;
 
 public final class LinkUnit
 {
     private Address sender;
-    private link.LinkMessage message;
+    private LinkMessage message;
+    private Link link;
 
-    this(Address sender, link.LinkMessage message)
+    this(Address sender, LinkMessage message, Link link)
     {
         this.sender = sender;
         this.message = message;
@@ -19,8 +21,13 @@ public final class LinkUnit
         return sender;
     }
 
-    public link.LinkMessage getMessage()
+    public LinkMessage getMessage()
     {
         return message;
+    }
+
+    public Link getLink()
+    {
+        return link;
     }
 }
