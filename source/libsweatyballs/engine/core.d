@@ -89,7 +89,8 @@ public final class Engine : Thread
 
     private void initLinkHandler(Link link)
     {
-        import libsweatyballs.engine.handlers;
+        import libsweatyballs.engine.handlers : engine, advHandler, pktHandler, defaultHandler;
+        engine = this;
 
         /* Register a handler for advertisements */
         link.registerHandler(&advHandler, 0);
