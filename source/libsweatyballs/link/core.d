@@ -158,9 +158,37 @@ public final class Link : Thread
         handlersLock.unlock();
     }
 
+    private LinkUnitHandler defaultHandler;
+
+    public void setDefaultHandler(LinkUnitHandler funcPtr)
+    {
+        defaultHandler = funcPtr;
+    }
+
+    /**
+    * Returns the given handler function associated
+    * with the provided message type.
+    *
+    * If the message type is not found then a default
+    * handler is returned
+    */
     public LinkUnitHandler getHandler(ubyte code)
     {
-        return handlers[code];
+        LinkUnitHandler handler;
+
+        handlersLock.lock();
+
+        handler = *(code in handlers);
+
+        if(!handler)
+        {
+            handler = defaultHandler;
+        }
+
+        handlersLock.unlock();
+    
+        
+        return handler;
     }
 
     /**
