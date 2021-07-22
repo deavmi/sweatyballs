@@ -171,6 +171,9 @@ public final class Link : Thread
     *
     * If the message type is not found then a default
     * handler is returned
+    *
+    * TODO: I should work on eventy again and use that
+    * for this project then (next version)
     */
     public LinkUnitHandler getHandler(ubyte code)
     {
