@@ -193,7 +193,7 @@ public final class Link : Thread
         gprintln("Signature: Not yet implemented");
         gprintln("Neighbor Port: "~to!(string)(neighborPort));
 
-        gprintln(to!(ubyte)(message.type));
+
 
 
 
@@ -205,7 +205,12 @@ public final class Link : Thread
         engine.getSwitch().addNeighbor(neighbor);
 
 
-
+        /**
+        * Get the handler required for the given message type
+        * and call it
+        */
+        LinkUnitHandler handlerFunc = getHandler(to!(ubyte)(message.type));
+        handlerFunc(unit);
 
         /* Handle route advertisements */
         if(mType == LinkMessageType.ADVERTISEMENT)
