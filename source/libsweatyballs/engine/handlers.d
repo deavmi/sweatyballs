@@ -13,3 +13,8 @@ public void pktHandler(LinkUnit unit)
 {
     gprintln("pktHandler!!!!!!!!!! "~unit.toString());
 }
+
+public void defaultHandler(LinkUnit unit)
+{
+    gprintln("Unknown mesage type!!!!!!!!!! "~unit.toString());
+}

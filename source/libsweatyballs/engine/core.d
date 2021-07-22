@@ -96,6 +96,9 @@ public final class Engine : Thread
 
         /* Register a handler for packets */
         link.registerHandler(&pktHandler, 1);
+
+        /* Register default handler */
+        link.setDefaultHandler(&defaultHandler);
     }
 
     private void parseConfig(Config config)
