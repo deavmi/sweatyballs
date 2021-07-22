@@ -87,6 +87,17 @@ public final class Engine : Thread
         return copy;
     }
 
+    private void initLinkHandler(Link link)
+    {
+        import libsweatyballs.engine.handlers;
+
+        /* Register a handler for advertisements */
+        link.registerHandler(&advHandler, 0);
+
+        /* Register a handler for packets */
+        link.registerHandler(&pktHandler, 1);
+    }
+
     private void parseConfig(Config config)
     {
         /* TODO: Set configuration parameter */
@@ -225,6 +236,7 @@ public final class Engine : Thread
         foreach(Link link; links)
         {
             gprintln("Initializing link "~to!(string)(link)~" ...");
+            initLinkHandler(link);
             link.launch();
         }
         gprintln("Links have been initialized");
