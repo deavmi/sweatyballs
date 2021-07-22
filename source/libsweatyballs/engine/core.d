@@ -15,6 +15,7 @@ import std.socket : Address, parseAddress;
 import libsweatyballs.link.message.core;
 import std.container.slist;
 import std.range;
+import libsweatyballs.engine.handlers : engine, advHandler, pktHandler, defaultHandler;
 
 /* TODO: Import for config thing */
 
@@ -62,6 +63,9 @@ public final class Engine : Thread
 
         /* Initialize locks */
         initMutexes();
+
+        /* Initialize the handler's module globals */
+        initEngine();
     }
 
     /**
@@ -87,11 +91,27 @@ public final class Engine : Thread
         return copy;
     }
 
+    /**
+    * This function will do an import which
+    * will initialize the module, any other
+    * thread who referes to a mobule's
+    * member also inits their own copy
+    *
+    * There is however a global field
+    * `__gshared` that all code using
+    * it refers to one entity, not
+    * several static members per each
+    * module
+    *
+    * This must be set here
+    */
+    private void initEngine()
+    {
+        engine = this;
+    }
+
     private void initLinkHandler(Link link)
     {
-        import libsweatyballs.engine.handlers : engine, advHandler, pktHandler, defaultHandler;
-        engine = this;
-
         /* Register a handler for advertisements */
         link.registerHandler(&advHandler, 0);
 
