@@ -69,6 +69,7 @@ public final class Link : Thread
     {
         inQueueLock = new Mutex();
         outQueueLock = new Mutex();
+        handlersLock = new Mutex();
     }
 
     /**
@@ -145,6 +146,23 @@ public final class Link : Thread
         return neighborAddress;
     }
 
+    alias LinkUnitHandler = void function (LinkUnit);
+
+    private LinkUnitHandler[ubyte] handlers;
+    private Mutex handlersLock;
+
+    public void registerHandler(LinkUnitHandler funcPtr, ubyte code)
+    {
+        handlersLock.lock();
+        handlers[code] = funcPtr;
+        handlersLock.unlock();
+    }
+
+    public LinkUnitHandler getHandler(ubyte code)
+    {
+        return handlers[code];
+    }
+
     /**
     * This will process the message
     *
@@ -174,6 +192,8 @@ public final class Link : Thread
         gprintln("Public key: "~identity);
         gprintln("Signature: Not yet implemented");
         gprintln("Neighbor Port: "~to!(string)(neighborPort));
+
+        gprintln(to!(ubyte)(message.type));
 
 
 
