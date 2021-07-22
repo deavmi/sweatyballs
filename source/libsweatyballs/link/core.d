@@ -138,7 +138,7 @@ public final class Link : Thread
     * Given Address we take the IP address (not source port of mcast packet)
     * and then also the `nieghborPort` and spit out a new Address
     */
-    private static Address getNeighborIPAddress(Address sender, ushort neighborPort)
+    public static Address getNeighborIPAddress(Address sender, ushort neighborPort)
     {
         /* IPv6 reachable neighbor socket */
         Address neighborAddress = parseAddress(sender.toAddrString(), neighborPort);
