@@ -290,6 +290,9 @@ public final class Link : Thread
 
                     bool stat = engine.getSwitch().isNeighbour(packet.fromKey) !is null;
                     gprintln("WasPacketFromNeighbor: "~to!(string)(stat), DebugType.WARNING);
+
+                    /* Deliver this to the engine */
+                    engine.newPacket(packet);
                 }
                 /* If it is not destined to me then forward it */
                 else
@@ -337,6 +340,8 @@ public final class Link : Thread
         inQueue ~= unit;
         inQueueLock.unlock();
     }
+
+    
 
     public bool hasInQueue()
     {

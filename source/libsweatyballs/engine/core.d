@@ -12,6 +12,9 @@ import gogga;
 import core.thread : Thread, dur;
 import libsweatyballs.router.table : Route;
 import std.socket : Address, parseAddress;
+import libsweatyballs.link.message.core;
+import std.container.slist;
+import std.range;
 
 /* TODO: Import for config thing */
 
@@ -33,6 +36,12 @@ public final class Engine : Thread
     */
     private Link[] links;
     private Mutex linksMutex;
+
+    /**
+    * Received packets
+    */
+    private SList!(Packet) packetQueue;
+    private Mutex packetQueueLock;
 
     /**
     * 1. This must read config given to it
@@ -61,6 +70,7 @@ public final class Engine : Thread
     private void initMutexes()
     {
         linksMutex = new Mutex();
+        packetQueueLock = new Mutex();
     }
 
     public Link[] getLinks()
@@ -118,6 +128,59 @@ public final class Engine : Thread
         return zwitch;
     }
 
+    public void newPacket(Packet packet)
+    {
+        packetQueueLock.lock();
+        packetQueue.insertAfter(packetQueue[], packet);
+        packetQueueLock.unlock();
+    }
+
+    private Packet checkPacket()
+    {
+        Packet received;
+
+        /* Check for packet */
+        packetQueueLock.lock();
+        if(!packetQueue.empty())
+        {
+            /**
+            * Dequeue a packet
+            *
+            * Get the Range internal
+            * (use auto as this is some butchered
+            * fucking templatised shit)
+            */
+            received = (packetQueue[]).front();
+            (packetQueue[]).popFront();
+        }
+        packetQueueLock.unlock();
+
+
+        
+        return received;
+    
+    }
+
+    /**
+    * processPacket
+    *
+    * This method is used when a packet arrives to the engine
+    * and is used to decide what to do with the packet, this
+    * could be:
+    *
+    * 1. If the packet's payload is recognizable as a Session
+    *    control command, then it will attempt to get a new
+    *    Session created
+    * 2. If not a Session control message then we (as of now)
+    *    drop the packet. (TODO: We could keep it but eh, use
+    *    Sessions rather please)
+    */
+    private void processPacket(Packet packet)
+    {
+
+    }
+
+
     private void worker()
     {
         while(true)
@@ -129,6 +192,15 @@ public final class Engine : Thread
             foreach(Route route; routes)
             {
                 zwitch.sendPacket(route.getAddress(), cast(byte[])"Hello world");    
+            }
+
+            /**
+            * Check receiveve queue
+            */
+            Packet packet = checkPacket();
+            if(packet)
+            {
+                processPacket(packet);
             }
 
             Thread.sleep(dur!("seconds")(1));
