@@ -254,52 +254,6 @@ public final class Link : Thread
         /* Handle session messages */
         else if(mType == LinkMessageType.PACKET)
         {
-            gprintln("Woohoo! PACKET received!", DebugType.WARNING);
-
-            try
-            {
-
-                /* TODO: Now check if destined to me, if so THEN attempt decrypt */
-                link.Packet packet = fromProtobuf!(link.Packet)(msgPayload);
-                gprintln("Payload (encrypted): "~to!(string)(packet.payload));
-
-                /* Attempt decrypting with my key */
-                import crypto.rsa;
-                import std.string : cmp;
-
-                /* TODO: Make sure decryotion passes, maybe add a PayloadBytes thing to use that */
-                ubyte[] decryptedPayload = RSA.decrypt(engine.getRouter().getIdentity().getKeys().privateKey, packet.payload);
-                gprintln("Payload (decrypted): "~cast(string)(decryptedPayload));
-
-                /* Now see if it is destined to us */
-
-                /* If it is destined to us (TODO: Accept it) */
-                if(cmp(packet.toKey, engine.getRouter().getIdentity().getKeys().publicKey) == 0)
-                {
-                    gprintln("PACKET IS ACCEPTED TO ME", DebugType.WARNING);
-
-                    bool stat = engine.getSwitch().isNeighbour(packet.fromKey) !is null;
-                    gprintln("WasPacketFromNeighbor: "~to!(string)(stat), DebugType.WARNING);
-
-                    /* Deliver this to the engine */
-                    engine.newPacket(packet);
-                }
-                /* If it is not destined to me then forward it */
-                else
-                {
-                    engine.getSwitch().forward(packet);
-                    gprintln("PACKET IS FORWRDED", DebugType.WARNING);
-                }
-            
-            }
-            catch(ProtobufException)
-            {
-                gprintln("Failed to deserialize protobuff bytes", DebugType.ERROR);
-            }
-            
-
-           
-            
             
         }
         /* TODO: Does protobuf throw en error if so? */

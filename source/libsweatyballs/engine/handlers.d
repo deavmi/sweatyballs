@@ -114,7 +114,71 @@ public void advHandler(LinkUnit unit)
 
 public void pktHandler(LinkUnit unit)
 {
+    /**
+    * Message details
+    *
+    * 1. Public key of Link Neighbor
+    * 2. Signature of Link Neighbor
+    * 3. Neighbor port of LinkNeighbor
+    * 4. Message type (also from LinkUnit address)
+    * 5. Payload
+    */
+    link.LinkMessage message = unit.getMessage();
+    link.LinkMessageType mType = message.type;
+    Address sender = unit.getSender();
+    string identity = message.publicKey;
+    ushort neighborPort = to!(ushort)(message.neighborPort);
+    ubyte[] msgPayload = message.payload;
+
+
+    Address neighborAddress = Link.getNeighborIPAddress(sender, neighborPort);
+    Neighbor neighbor = new Neighbor(identity, neighborAddress, unit.getLink());
+
     gprintln("pktHandler!!!!!!!!!! "~unit.toString());
+
+
+    gprintln("Woohoo! PACKET received!", DebugType.WARNING);
+
+    try
+    {
+
+        /* TODO: Now check if destined to me, if so THEN attempt decrypt */
+        link.Packet packet = fromProtobuf!(link.Packet)(msgPayload);
+        gprintln("Payload (encrypted): "~to!(string)(packet.payload));
+
+        /* Attempt decrypting with my key */
+        import crypto.rsa;
+        import std.string : cmp;
+
+        /* TODO: Make sure decryotion passes, maybe add a PayloadBytes thing to use that */
+        ubyte[] decryptedPayload = RSA.decrypt(engine.getRouter().getIdentity().getKeys().privateKey, packet.payload);
+        gprintln("Payload (decrypted): "~cast(string)(decryptedPayload));
+
+        /* Now see if it is destined to us */
+
+        /* If it is destined to us (TODO: Accept it) */
+        if(cmp(packet.toKey, engine.getRouter().getIdentity().getKeys().publicKey) == 0)
+        {
+            gprintln("PACKET IS ACCEPTED TO ME", DebugType.WARNING);
+
+            bool stat = engine.getSwitch().isNeighbour(packet.fromKey) !is null;
+            gprintln("WasPacketFromNeighbor: "~to!(string)(stat), DebugType.WARNING);
+
+            /* Deliver this to the engine */
+            engine.newPacket(packet);
+        }
+        /* If it is not destined to me then forward it */
+        else
+        {
+            engine.getSwitch().forward(packet);
+            gprintln("PACKET IS FORWRDED", DebugType.WARNING);
+        }
+    
+    }
+    catch(ProtobufException)
+    {
+        gprintln("Failed to deserialize protobuff bytes", DebugType.ERROR);
+    }
 }
 
 public void defaultHandler(LinkUnit unit)
