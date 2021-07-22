@@ -14,6 +14,7 @@ public final class LinkUnit
     {
         this.sender = sender;
         this.message = message;
+        this.link = link;
     }
 
     public Address getSender()
