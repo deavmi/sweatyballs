@@ -51,3 +51,40 @@ message Packet
     bytes payload = 4;
     uint64 ttl = 5;
 }
+
+
+//PacketPayload
+//
+//Represents what is encoded into
+//the `payload` field of Packet
+message PacketPayload
+{
+    PacketPayloadType type = 1;
+    bytes payload = 2;
+}
+
+enum PacketPayloadType
+{
+    SESSION_CONTROL = 0;
+}
+
+message SessionCTLMessage
+{
+    SessionCTLType type = 1;
+    uint32 sessionCTRLID = 2;
+}
+
+enum SessionCTLType
+{
+    SESSION_CREATE = 0;
+    SESSION_CTL_ACK = 1;
+    SESSION_DESTROY = 2;
+    SESSION_SETNEWKEY = 3;
+}
+
+
+//Actual Session packet (NOT a CTL)
+message SessionMessage
+{
+    bytes payload = 1;
+}

@@ -36,8 +36,39 @@ class Packet
     @Proto(5) ulong ttl = protoDefaultValue!ulong;
 }
 
+class PacketPayload
+{
+    @Proto(1) PacketPayloadType type = protoDefaultValue!PacketPayloadType;
+    @Proto(2) bytes payload = protoDefaultValue!bytes;
+}
+
+class SessionCTLMessage
+{
+    @Proto(1) SessionCTLType type = protoDefaultValue!SessionCTLType;
+    @Proto(2) uint sessionCTRLID = protoDefaultValue!uint;
+}
+
+class SessionMessage
+{
+    @Proto(1) bytes payload = protoDefaultValue!bytes;
+}
+
 enum LinkMessageType
 {
     ADVERTISEMENT = 0,
     PACKET = 1,
+    SESSION = 2,
+}
+
+enum PacketPayloadType
+{
+    SESSION_CONTROL = 0,
+}
+
+enum SessionCTLType
+{
+    SESSION_CREATE = 0,
+    SESSION_CTL_ACK = 1,
+    SESSION_DESTROY = 2,
+    SESSION_SETNEWKEY = 3,
 }
