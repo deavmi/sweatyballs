@@ -18,7 +18,7 @@ enum LinkMessageType
 {
     ADVERTISEMENT = 0;
     PACKET = 1;
-
+    SESSION = 2;
 }
 
 
@@ -33,11 +33,8 @@ message Advertisement
 
 message RouteEntry
 {
-    
-
     // Address this is a route to
     string address = 1;
-
     uint32 metric = 2;
 
     //Add perhaps siganture?
