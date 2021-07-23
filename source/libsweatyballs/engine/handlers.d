@@ -59,56 +59,31 @@ public void advHandler(LinkUnit unit)
         */
         Route newRoute = new Route(route.address, neighbor, 100, metric+64);
 
-        gprintln(route.address);
-        gprintln(engine.getRouter().getIdentity().getKeys().publicKey);
+       
+        /**
+        * TODO: Found it, only install routes if their updated metric on arrival is lesser than current route
+        * TODO: Search for existing route
+        * TODO: This might make above constraints nmeaningless, or well atleast the one above me (outer one not me thinks)
+        */
+        Route possibleExistingRoute = engine.getRouter().getTable().lookup(route.address);
 
-        // /**
-        // * Don't add routes to oneself
-        // */
-        // if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
-        // {
-        //     /**
-        //     * Don;t add routes we advertised (from ourself) - this
-        //     * ecludes self route checked before entering here
-        //     */
-        //     if(newRoute.getNexthop().getIdentity() != engine.getRouter().getIdentity().getKeys().publicKey)
-        //     {
-                /**
-                * TODO: Found it, only install routes if their updated metric on arrival is lesser than current route
-                * TODO: Search for existing route
-                * TODO: This might make above constraints nmeaningless, or well atleast the one above me (outer one not me thinks)
-                */
-                Route possibleExistingRoute = engine.getRouter().getTable().lookup(route.address);
+        /* If no route exists then add it */
+        if(!possibleExistingRoute)
+        {
+            engine.getRouter().getTable().addRoute(newRoute);
+        }
+        /* If a route exists only install it if current one has higher metric than advertised one */
+        else
+        {
+            if(possibleExistingRoute.getMetric() > newRoute.getMetric())
+            {
+                /* Remove the old one (higher metric than advertised route) */
+                engine.getRouter().getTable().removeRoute(possibleExistingRoute);
 
-                /* If no route exists then add it */
-                if(!possibleExistingRoute)
-                {
-                    engine.getRouter().getTable().addRoute(newRoute);
-                }
-                /* If a route exists only install it if current one has higher metric than advertised one */
-                else
-                {
-                    if(possibleExistingRoute.getMetric() > newRoute.getMetric())
-                    {
-                        /* Remove the old one (higher metric than advertised route) */
-                        engine.getRouter().getTable().removeRoute(possibleExistingRoute);
-
-                        /* Install the advertised route (lower metric than currently installed route) */
-                        engine.getRouter().getTable().addRoute(newRoute);
-                    }
-                }
-                
-            // }
-        //     else
-        //     {
-        //         gprintln("Not adding a route that originated from us", DebugType.ERROR);
-        //     }
-        
-        // }
-        // else
-        // {
-        //     gprintln("Skipping addition of self-route", DebugType.WARNING);
-        // }
+                /* Install the advertised route (lower metric than currently installed route) */
+                engine.getRouter().getTable().addRoute(newRoute);
+            }
+        }
     }
 }
 
