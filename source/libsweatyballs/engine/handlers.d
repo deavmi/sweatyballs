@@ -62,17 +62,17 @@ public void advHandler(LinkUnit unit)
         gprintln(route.address);
         gprintln(engine.getRouter().getIdentity().getKeys().publicKey);
 
-        /**
-        * Don't add routes to oneself
-        */
-        if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
-        {
-            /**
-            * Don;t add routes we advertised (from ourself) - this
-            * ecludes self route checked before entering here
-            */
-            if(newRoute.getNexthop().getIdentity() != engine.getRouter().getIdentity().getKeys().publicKey)
-            {
+        // /**
+        // * Don't add routes to oneself
+        // */
+        // if(cmp(route.address, engine.getRouter().getIdentity().getKeys().publicKey) != 0)
+        // {
+        //     /**
+        //     * Don;t add routes we advertised (from ourself) - this
+        //     * ecludes self route checked before entering here
+        //     */
+        //     if(newRoute.getNexthop().getIdentity() != engine.getRouter().getIdentity().getKeys().publicKey)
+        //     {
                 /**
                 * TODO: Found it, only install routes if their updated metric on arrival is lesser than current route
                 * TODO: Search for existing route
@@ -98,17 +98,17 @@ public void advHandler(LinkUnit unit)
                     }
                 }
                 
-            }
-            else
-            {
-                gprintln("Not adding a route that originated from us", DebugType.ERROR);
-            }
+            // }
+        //     else
+        //     {
+        //         gprintln("Not adding a route that originated from us", DebugType.ERROR);
+        //     }
         
-        }
-        else
-        {
-            gprintln("Skipping addition of self-route", DebugType.WARNING);
-        }
+        // }
+        // else
+        // {
+        //     gprintln("Skipping addition of self-route", DebugType.WARNING);
+        // }
     }
 }
 
