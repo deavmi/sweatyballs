@@ -77,7 +77,7 @@ public final class Router : Thread
             Route[] routes = routingTable.getRoutes();
             foreach(Route route; routes)
             {
-                routeInfo ~= routeInfo ~ to!(string)(route) ~ "\n";
+                routeInfo ~= to!(string)(route) ~ "\n";
             }
 
             gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
