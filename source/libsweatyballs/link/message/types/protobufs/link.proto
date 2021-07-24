@@ -36,6 +36,7 @@ message RouteEntry
     // Address this is a route to
     string address = 1;
     uint32 metric = 2;
+    string creationTime = 3;
 
     //Add perhaps siganture?
 }

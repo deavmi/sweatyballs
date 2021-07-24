@@ -25,6 +25,7 @@ class RouteEntry
 {
     @Proto(1) string address = protoDefaultValue!string;
     @Proto(2) uint metric = protoDefaultValue!uint;
+    @Proto(3) string creationTime = protoDefaultValue!string;
 }
 
 class Packet
