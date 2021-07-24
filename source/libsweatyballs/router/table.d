@@ -96,8 +96,10 @@ public final class Route
 
     public bool isExpired()
     {
-        Duration elapsedTime = updateTime.peek();
-        return (elapsedTime.total!("seconds") >= timeout) && ageibility;
+        /* Get the current time */
+        SysTime currentTime = Clock.currTime();
+
+        return (currentTime.toUnixTime() - creationTime.toUnixTime()) > timeout;    
     }
 
     public override bool opEquals(Object other)
