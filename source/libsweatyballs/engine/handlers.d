@@ -37,15 +37,10 @@ public void advHandler(LinkUnit unit)
     Address neighborAddress = Link.getNeighborIPAddress(sender, neighborPort);
     Neighbor neighbor = new Neighbor(identity, neighborAddress, unit.getLink());
 
-
-
-    gprintln("advHandler!!!!!!!!!! "~unit.toString());
-
     Advertisement advMsg = fromProtobuf!(link.Advertisement)(msgPayload);
 
     /* Get the routes being advertised */
     RouteEntry[] routes = advMsg.routes;
-    gprintln("Total of "~to!(string)(routes.length)~" received");
 
     /* TODO: Do router2router verification here */
 
@@ -59,7 +54,7 @@ public void advHandler(LinkUnit unit)
         * Create a new route with `nexthop` as the nexthop address
         * Also set its metric to whatever it is +64
         */
-        Route newRoute = new Route(route.address, neighbor, routeCreationTime, 1000, metric+64);
+        Route newRoute = new Route(route.address, neighbor, routeCreationTime, 100, metric+64);
 
         engine.getRouter().getTable().lockTable();
        
