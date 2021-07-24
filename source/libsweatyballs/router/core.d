@@ -83,14 +83,17 @@ public final class Router : Thread
             checkRouteExpiration();
 
             
-            // string routeInfo;
-            // Route[] routes = routingTable.getRoutes();
-            // foreach(Route route; routes)
-            // {
-            //     routeInfo ~= to!(string)(route) ~ "\n";
-            // }
+            
+            string routeInfo;
+            routingTable.lockTable();
+            Route[] routes = routingTable.getRoutes();
+            routingTable.unlockTable();
+            foreach(Route route; routes)
+            {
+                routeInfo ~= to!(string)(route) ~ "\n";
+            }
 
-            // gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
+            gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
 
 
             sleep(dur!("seconds")(5));
