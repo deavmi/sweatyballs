@@ -8,6 +8,7 @@ import std.datetime.stopwatch : StopWatch;
 import std.datetime : Duration;
 import gogga;
 import libsweatyballs.zwitch.neighbor;
+import std.datetime;
 
 /**
 * Route
@@ -30,13 +31,17 @@ public final class Route
     private StopWatch updateTime;
 
     private bool ageibility = true;
+
+    private SysTime creationTime;
     
-    this(string address, Neighbor nexthop, long timeout = 100, uint metric = 64)
+    this(string address, Neighbor nexthop, SysTime creationTime, long timeout = 100, uint metric = 64)
     {
         this.address = address;
         this.nexthop = nexthop;
         this.timeout = timeout;
         this.metric = metric;
+
+        this.creationTime = creationTime;
 
         /* Start the stop watch */
         updateTime.start();
@@ -51,6 +56,11 @@ public final class Route
     public string getAddress()
     {
         return address;
+    }
+
+    public SysTime getCreationTime()
+    {
+        return creationTime;
     }
 
     public Neighbor getNexthop()
