@@ -16,6 +16,7 @@ import libsweatyballs.link.message.core;
 import std.container.slist;
 import std.range;
 import libsweatyballs.engine.handlers : engine, advHandler, pktHandler, defaultHandler;
+import std.datetime : Clock;
 
 /* TODO: Import for config thing */
 
@@ -146,7 +147,7 @@ public final class Engine : Thread
         Neighbor selfNeighbor = new Neighbor(router.getIdentity().getKeys().publicKey, address, links[0]);
 
 
-        Route route = new Route(router.getIdentity().getKeys().publicKey, selfNeighbor);
+        Route route = new Route(router.getIdentity().getKeys().publicKey, selfNeighbor, Clock.currTime());
         route.setAgeibility(false);
 
         router.getTable().addRoute(route);
