@@ -9,6 +9,7 @@ import libsweatyballs.router.advertiser : Advertiser;
 import libsweatyballs.engine.core : Engine;
 import gogga;
 import std.conv : to;
+import std.datetime : Clock;
 
 /**
 * Router
@@ -56,6 +57,10 @@ public final class Router : Thread
         while(true)
         {
             /* TODO: Update our-self-route creationTime */
+            /* TODO: Lock table and unlock table */
+            Route selfRoute = routingTable.lookup(identity.getKeys().publicKey);
+            selfRoute.updateCreationTime(Clock.currTime());
+
             //TODO
 
 
