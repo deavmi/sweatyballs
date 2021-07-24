@@ -86,7 +86,7 @@ public final class Advertiser : Thread
             RouteEntry newRouteEntry = new RouteEntry();
             newRouteEntry.address = route.getAddress();
             newRouteEntry.metric = route.getMetric();
-            newRouteEntry.creationTime = route.getCreationTime();
+            newRouteEntry.creationTime = route.getCreationTime().toISOString();
 
             /* Add to list of RouteEntry-s */
             entries ~= newRouteEntry;
