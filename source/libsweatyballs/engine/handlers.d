@@ -53,13 +53,15 @@ public void advHandler(LinkUnit unit)
     {
         uint metric = route.metric;
         /* TODO: Extract time from here */
-        string time = route.creationTime;
+        import std.datetime;
+        SysTime routeCreationTime;
+        routeCreationTime.fromISOString(route.creationTime);
 
         /**
         * Create a new route with `nexthop` as the nexthop address
         * Also set its metric to whatever it is +64
         */
-        Route newRoute = new Route(route.address, neighbor, 100, metric+64);
+        Route newRoute = new Route(route.address, neighbor, routeCreationTime, 100, metric+64);
 
        
         /**
