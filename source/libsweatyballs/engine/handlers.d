@@ -54,7 +54,6 @@ public void advHandler(LinkUnit unit)
     {
         uint metric = route.metric;
         SysTime routeCreationTime = SysTime.fromISOString(route.creationTime);
-        gprintln("ROute creation time: "~to!(string)(routeCreationTime), DebugType.ERROR);
 
         /**
         * Create a new route with `nexthop` as the nexthop address
