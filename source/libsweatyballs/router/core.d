@@ -56,10 +56,11 @@ public final class Router : Thread
         
         while(true)
         {
-            /* TODO: Update our-self-route creationTime */
-            /* TODO: Lock table and unlock table */
+            /* Update our-self-route creationTime */
+            routingTable.lockTable();
             Route selfRoute = routingTable.lookup(identity.getKeys().publicKey);
             selfRoute.updateCreationTime(Clock.currTime());
+            routingTable.unlockTable();
 
             //TODO
 
@@ -82,14 +83,14 @@ public final class Router : Thread
             checkRouteExpiration();
 
             
-            string routeInfo;
-            Route[] routes = routingTable.getRoutes();
-            foreach(Route route; routes)
-            {
-                routeInfo ~= to!(string)(route) ~ "\n";
-            }
+            // string routeInfo;
+            // Route[] routes = routingTable.getRoutes();
+            // foreach(Route route; routes)
+            // {
+            //     routeInfo ~= to!(string)(route) ~ "\n";
+            // }
 
-            gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
+            // gprintln("<<<<<<< Routing table state "~getIdentity().getKeys().publicKey~">>>>>>>\n"~routeInfo);
 
 
             sleep(dur!("seconds")(5));
@@ -98,6 +99,7 @@ public final class Router : Thread
 
     private void checkRouteExpiration()
     {
+        routingTable.lockTable();
         Route[] routes = routingTable.getRoutes();
         foreach(Route route; routes)
         {
@@ -107,6 +109,7 @@ public final class Router : Thread
                 gprintln("Expired route "~to!(string)(route)~", removing...", DebugType.WARNING);
             }
         }
+        routingTable.unlockTable();
     }
 
     

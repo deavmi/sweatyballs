@@ -189,7 +189,9 @@ public final class Switch : Thread
             gprintln("sendPacket: We are sending to a node VIA router", DebugType.WARNING);
 
             /* Make sure there is a route entry for it */
+            engine.getRouter().getTable().lockTable();
             Route routeToHost = engine.getRouter().getTable().lookup(address);
+            engine.getRouter().getTable().unlockTable();
             if(routeToHost)
             {
                 /* Set the next hop to the neighbor with the address in the route entry */

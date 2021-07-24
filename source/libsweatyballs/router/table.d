@@ -151,68 +151,40 @@ public final class Table
 
     /**
     * Get routes
+    *
+    * unsafe, must lock
     */
     public Route[] getRoutes()
     {
-        /* The copied routes */
-        Route[] copiedRoutes;
-
-        /* Lock the routing table */
-        routeLock.lock();
-
-        /* Copy each route */
-        foreach(Route route; routes)
-        {
-            copiedRoutes ~= route;
-        }
-
-        /* Unlock the routing table */
-        routeLock.unlock();
-
-        return copiedRoutes;
+        return routes;
     }
 
     /**
     * Add a route 
+    *
+    * unsafe, must lock
     */
     public void addRoute(Route route)
     {
-        /* Lock the routing table */
-        routeLock.lock();
-
         /* Add the route (only if it doesn't already exist) */
         foreach(Route cRoute; routes)
         {
             /* FIXME: Make sure nexthop matches as well */
             if(cRoute == route)
             {
-                /* Refresh the route */
-                cRoute.refreshTime();
-
                 goto no_add_route;
             }
         }
 
         routes ~= route;
-        gprintln("Added route "~to!(string)(route));
-
-        gprintln("TABLE IS HOW BIG MY NIGGER??!?!?: "~to!(string)(routes.length), DebugType.ERROR);
-
-        
-        
+         
         no_add_route:
-
-        /* Unlock the routing table */
-        routeLock.unlock();
     }
 
     public Route lookup(string address)
     {
         /* The matched route (if any) */
         Route match;
-
-        /* Lock the routing table */
-        routeLock.lock();
 
         /* Add the route (only if it doesn't already exist) */
         foreach(Route route; routes)
@@ -223,9 +195,6 @@ public final class Table
                 match = route;
             }
         }
-
-        /* Unlock the routing table */
-        routeLock.unlock();
 
         return match;
     }
@@ -238,9 +207,6 @@ public final class Table
         /* New routing table */
         Route[] newRoutes;
 
-        /* Lock the routing table */
-        routeLock.lock();
-
         /* Add the route (only if it doesn't already exist) */
         foreach(Route cRoute; routes)
         {
@@ -252,8 +218,5 @@ public final class Table
         }
 
         routes = newRoutes;
-
-        /* Unlock the routing table */
-        routeLock.unlock();
     }
 }

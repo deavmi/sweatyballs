@@ -62,6 +62,7 @@ public void advHandler(LinkUnit unit)
         */
         Route newRoute = new Route(route.address, neighbor, routeCreationTime, 100, metric+64);
 
+        engine.getRouter().getTable().lockTable();
        
         /**
         * TODO: Found it, only install routes if their updated metric on arrival is lesser than current route
@@ -105,6 +106,8 @@ public void advHandler(LinkUnit unit)
                 /* TODO: Nothing needs to be done here */
             }
         }
+
+        engine.getRouter().getTable().unlockTable();
     }
 }
 

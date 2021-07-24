@@ -117,7 +117,9 @@ public final class Advertiser : Thread
         *
         * TODO: Shard these (batch them)
         */
+        router.getTable().lockTable();
         Route[] routes = router.getTable().getRoutes();
+        router.getTable().unlockTable();
         advertiseRoute(link, routes);      
     }
 
