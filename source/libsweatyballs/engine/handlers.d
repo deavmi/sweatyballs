@@ -52,6 +52,8 @@ public void advHandler(LinkUnit unit)
     foreach(RouteEntry route; routes)
     {
         uint metric = route.metric;
+        /* TODO: Extract time from here */
+        string time = route.creationTime;
 
         /**
         * Create a new route with `nexthop` as the nexthop address
