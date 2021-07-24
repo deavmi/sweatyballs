@@ -224,11 +224,13 @@ public final class Engine : Thread
             /**
             * FIXME: Remove this, this is just testing code
             */
+            router.getTable().lockTable();
             Route[] routes = router.getTable().getRoutes();
             foreach(Route route; routes)
             {
                 zwitch.sendPacket(route.getAddress(), cast(byte[])"Hello world");    
             }
+            router.getTable().unlockTable();
 
             /**
             * Check receiveve queue
