@@ -55,6 +55,10 @@ public final class Router : Thread
         
         while(true)
         {
+            /* TODO: Update our-self-route creationTime */
+            //TODO
+
+
             // /* Cycle through the in queue of each link */
             // Link[] links = getLinks();
             // foreach(Link link; links)
