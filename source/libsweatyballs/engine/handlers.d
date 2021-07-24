@@ -11,6 +11,7 @@ import libsweatyballs.router.table : Route;
 import std.socket : Address;
 import libsweatyballs.zwitch.neighbor : Neighbor;
 import libsweatyballs.link.core : Link;
+import std.datetime : SysTime;
 
 public __gshared Engine engine;
 
@@ -52,8 +53,6 @@ public void advHandler(LinkUnit unit)
     foreach(RouteEntry route; routes)
     {
         uint metric = route.metric;
-        /* TODO: Extract time from here */
-        import std.datetime;
         SysTime routeCreationTime;
         routeCreationTime.fromISOString(route.creationTime);
 
