@@ -131,6 +131,16 @@ public final class Table
         initMutexes();
     }
 
+    public void lockTable()
+    {
+        routeLock.lock();
+    }
+
+    public void unlockTable()
+    {
+        routeLock.unlock();
+    }
+
     /**
     * Initialize the mutexes
     */
