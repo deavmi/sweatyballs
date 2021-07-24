@@ -78,13 +78,31 @@ public void advHandler(LinkUnit unit)
         /* If a route exists only install it if current one has higher metric than advertised one */
         else
         {
-            if(possibleExistingRoute.getMetric() > newRoute.getMetric())
+            /**
+            * If the route is already installed then simply update the creationTime field
+            */
+            if(possibleExistingRoute == newRoute)
+            {
+                /* TODO: Even more reason to lock the table */
+                possibleExistingRoute.updateCreationTime(routeCreationTime);
+            }
+            /**
+            * If the routes are not the same then go and check the metric to see if it is better
+            * and only install it if so
+            *
+            * TODO: Lock WHOLE table when doing these things (the below code is not logically safe)
+            */
+            else if(possibleExistingRoute.getMetric() > newRoute.getMetric())
             {
                 /* Remove the old one (higher metric than advertised route) */
                 engine.getRouter().getTable().removeRoute(possibleExistingRoute);
 
                 /* Install the advertised route (lower metric than currently installed route) */
                 engine.getRouter().getTable().addRoute(newRoute);
+            }
+            else
+            {
+                /* TODO: Nothing needs to be done here */
             }
         }
     }

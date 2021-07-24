@@ -47,6 +47,11 @@ public final class Route
         updateTime.start();
     }
 
+    public void updateCreationTime(SysTime creationTime)
+    {
+        this.creationTime = creationTime;
+    }
+
     public void refreshTime()
     {
         /* Reset the timer */
