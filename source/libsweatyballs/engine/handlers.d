@@ -53,14 +53,14 @@ public void advHandler(LinkUnit unit)
     foreach(RouteEntry route; routes)
     {
         uint metric = route.metric;
-        SysTime routeCreationTime;
-        routeCreationTime.fromISOString(route.creationTime);
+        SysTime routeCreationTime = SysTime.fromISOString(route.creationTime);
+        gprintln("ROute creation time: "~to!(string)(routeCreationTime), DebugType.ERROR);
 
         /**
         * Create a new route with `nexthop` as the nexthop address
         * Also set its metric to whatever it is +64
         */
-        Route newRoute = new Route(route.address, neighbor, routeCreationTime, 100, metric+64);
+        Route newRoute = new Route(route.address, neighbor, routeCreationTime, 1000, metric+64);
 
         engine.getRouter().getTable().lockTable();
        
