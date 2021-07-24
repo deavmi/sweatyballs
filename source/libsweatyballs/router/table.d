@@ -28,8 +28,8 @@ public final class Route
     * the table
     */
     private long timeout;
-    private StopWatch updateTime;
 
+    /* TODO: Either guarantee fast updates or don't expire ourself AT ALL */
     private bool ageibility = true;
 
     private SysTime creationTime;
@@ -42,20 +42,11 @@ public final class Route
         this.metric = metric;
 
         this.creationTime = creationTime;
-
-        /* Start the stop watch */
-        updateTime.start();
     }
 
     public void updateCreationTime(SysTime creationTime)
     {
         this.creationTime = creationTime;
-    }
-
-    public void refreshTime()
-    {
-        /* Reset the timer */
-        updateTime.reset();
     }
 
     public string getAddress()
