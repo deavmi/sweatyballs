@@ -90,16 +90,15 @@ public final class Route
 
     public long getAge()
     {
-        Duration elapsedTime = updateTime.peek();
-        return elapsedTime.total!("seconds");
+        /* Get the current time */
+        SysTime currentTime = Clock.currTime();
+
+        return currentTime.toUnixTime() - creationTime.toUnixTime();
     }
 
     public bool isExpired()
     {
-        /* Get the current time */
-        SysTime currentTime = Clock.currTime();
-
-        return (currentTime.toUnixTime() - creationTime.toUnixTime()) > timeout;    
+        return (getAge()) > timeout;    
     }
 
     public override bool opEquals(Object other)
