@@ -7,12 +7,14 @@
 		"bformat": "~>3.1.1",
 		"crypto": "~>0.2.16",
 		"gogga": "~>0.1.3",
+		"libtun": "~>0.0.2",
 		"protobuf": "~>0.6.2"
 	},
 	"description": "Next-hop routing with crypto",
 	"license": "GPLv3",
 	"name": "sweatyballs",
-	"preBuildCommands": ["protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/session.proto --d_out=source/libsweatyballs/link/message/types/.",
+	"preBuildCommands": [
+		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/session.proto --d_out=source/libsweatyballs/link/message/types/.",
 		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/advertisement.proto --d_out=source/libsweatyballs/link/message/types/.",
 		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/packet.proto --d_out=source/libsweatyballs/link/message/types/.",
 		"protoc --plugin=\"$HOME/.dub/packages/protobuf-0.6.2/protobuf/protoc_gen_d/../build/protoc-gen-d\" source/libsweatyballs/link/message/types/protobufs/link.proto --d_out=source/libsweatyballs/link/message/types/."
