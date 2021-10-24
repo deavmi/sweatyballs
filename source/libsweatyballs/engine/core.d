@@ -217,8 +217,31 @@ public final class Engine : Thread
     }
 
 
+    /**
+    * FIXME: Remove this and set it up elsewhere
+    *
+    * This function is here to setup a tun adapter which will
+    * then push shit in and out or something
+    */
+    import libtun.adapter;
+    private TUNAdapter fuckKnows()
+    {
+        
+        TUNAdapter tun = new TUNAdapter("sweatyballs0", AdapterType.TUN);
+
+        return tun;
+    }
+
+
     private void worker()
     {
+        /* TODO: Catch exceptions and end everything when TUNAdapter fails to spawn */
+        import libtun.adapter;
+        TUNAdapter tun = fuckKnows();
+        byte[] poes;
+        poes.length = 4390;
+        tun.receive(poes);
+        
         while(true)
         {
             /**
