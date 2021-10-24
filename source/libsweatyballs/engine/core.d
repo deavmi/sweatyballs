@@ -125,6 +125,9 @@ public final class Engine : Thread
 
     private void parseConfig(Config config)
     {
+        /* TODO: Setup the tun adapter */
+        tun = new TUNAdapter("sweatyballs0", AdapterType.TUN);
+
         /* TODO: Set configuration parameter */
 
         /* Setup links */
@@ -224,35 +227,24 @@ public final class Engine : Thread
     * then push shit in and out or something
     */
     import libtun.adapter;
-    private TUNAdapter fuckKnows()
-    {
-        
-        TUNAdapter tun = new TUNAdapter("sweatyballs0", AdapterType.TUN);
+ 
 
-        return tun;
-    }
 
+    private TUNAdapter tun;
 
     private void worker()
     {
-        /* TODO: Catch exceptions and end everything when TUNAdapter fails to spawn */
-        import libtun.adapter;
-        TUNAdapter tun;
+        
 
-        try
-        {
-            tun = fuckKnows();
-        }
-        catch(TUNException e)
-        {
-            gprintln("Could not spawn new tun interface: "~e.msg, DebugType.ERROR);
-        }
-        byte[] poes;
-        poes.length = 4390;
-        tun.receive(poes);
+        
         
         while(true)
         {
+            byte[] poes;
+        
+        tun.receive(poes);
+            gprintln(poes);
+
             /**
             * FIXME: Remove this, this is just testing code
             */

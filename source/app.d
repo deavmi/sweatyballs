@@ -5,6 +5,7 @@ import libsweatyballs.engine.configuration : Config;
 import libsweatyballs.security.identity : Identity;
 import libsweatyballs.link.core : Link;
 import libsweatyballs.engine.core : Engine;
+import libtun.adapter : TUNException;
 
 void main(string[] args)
 {
@@ -25,9 +26,21 @@ void main(string[] args)
 	//links ~= new Link("interface2");
 	config.links = links;
 
-	/* Create a new Engine */
-	Engine engine = new Engine(config);
+	/* The Engine */
+	Engine engine;
 
-	/* Start the engine */
-	engine.launch();
+	/* Attempt to create a new Engine */
+	try
+	{
+		/* Create the Engine */
+		engine = new Engine(config);
+
+		/* Start the engine */
+		engine.launch();
+	}
+	/* Fail well */
+	catch(TUNException e)
+	{
+		gprintln("Error creating tun device: "~e.msg, DebugType.ERROR);
+	}
 }
