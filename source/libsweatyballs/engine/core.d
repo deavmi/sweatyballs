@@ -237,7 +237,16 @@ public final class Engine : Thread
     {
         /* TODO: Catch exceptions and end everything when TUNAdapter fails to spawn */
         import libtun.adapter;
-        TUNAdapter tun = fuckKnows();
+        TUNAdapter tun;
+
+        try
+        {
+            tun = fuckKnows();
+        }
+        catch(TUNException e)
+        {
+            gprintln("Could not spawn new tun interface: "~e.msg, DebugType.ERROR);
+        }
         byte[] poes;
         poes.length = 4390;
         tun.receive(poes);
