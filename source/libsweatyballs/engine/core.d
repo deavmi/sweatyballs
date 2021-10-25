@@ -242,8 +242,15 @@ public final class Engine : Thread
         {
             byte[] poes;
         
-        tun.receive(poes);
-            gprintln("TUNRecieve: "~to!(string)(poes));
+            try
+            {
+                tun.receive(poes);
+                gprintln("TUNRecieve: "~to!(string)(poes));
+            }
+            catch(TUNException e)
+            {
+                gprintln("Receive error on tun device", DebugType.ERROR);
+            }
 
             /**
             * FIXME: Remove this, this is just testing code
