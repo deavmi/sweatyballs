@@ -246,6 +246,22 @@ public final class Engine : Thread
             {
                 tun.receive(poes);
                 gprintln("TUNRecieve: "~to!(string)(poes));
+
+                /* Grab the version */
+                ubyte firstByte = poes[0];
+                firstByte = firstByte >> 4;
+
+                /* Only acceopt IPv6 packets */
+                if(firstByte == 6)
+                {
+
+                }
+                /* Disregard anything else */
+                else
+                {
+                    gprintln("Not an IPv6 packet", DebugType.WARNING);
+                }
+
             }
             catch(TUNException e)
             {
