@@ -251,10 +251,14 @@ public final class Engine : Thread
                 ubyte firstByte = poes[0];
                 firstByte = firstByte >> 4;
 
-                /* Only acceopt IPv6 packets */
+                /* Only accept IPv6 packets */
                 if(firstByte == 6)
                 {
+                    /* Get the source address */
+                    byte[16] srcAddr6 = poes[8..24];
 
+                    /* Get the destination address */
+                    byte[16] dstAddr6 = poes[24..40];
                 }
                 /* Disregard anything else */
                 else
@@ -267,6 +271,11 @@ public final class Engine : Thread
             {
                 gprintln("Receive error on tun device", DebugType.ERROR);
             }
+            // catch(RangeError)
+            // {
+            //     gprintln("Packet length mismatch", DebugType.WARNING);
+            // }
+            /* TODO: Add a catch for range exception */
 
             /**
             * FIXME: Remove this, this is just testing code
