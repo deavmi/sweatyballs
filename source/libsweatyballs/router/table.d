@@ -9,6 +9,8 @@ import std.datetime : Duration;
 import gogga;
 import libsweatyballs.zwitch.neighbor;
 import std.datetime;
+import std.digest.sha : sha512Of;
+import std.digest : toHexString;
 
 /**
 * Route
@@ -33,6 +35,16 @@ public final class Route
     private bool ageibility = true;
 
     private SysTime creationTime;
+
+
+
+    /**
+    * Keys, if shortened may clash, so let's hash them
+    * such that we get a very different string with
+    * higher bits most probably lot different
+    * than that of the key cmps.
+    */
+    private string addressHash;
     
     this(string address, Neighbor nexthop, SysTime creationTime, long timeout = 100, uint metric = 64)
     {
@@ -42,6 +54,9 @@ public final class Route
         this.metric = metric;
 
         this.creationTime = creationTime;
+
+        /* Compute the address's hash */
+        addressHash = toHexString(sha512Of(address));
     }
 
     public void updateCreationTime(SysTime creationTime)
@@ -101,6 +116,11 @@ public final class Route
         return cmp(otherRoute.getAddress(), this.getAddress()) == 0 &&
                 otherRoute.getNexthop() == this.getNexthop() &&
                 otherRoute.getMetric() == this.getMetric();
+    }
+
+    public string getAddressHash()
+    {
+        return addressHash;
     }
 }
 
