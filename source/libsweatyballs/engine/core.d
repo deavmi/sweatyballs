@@ -256,9 +256,13 @@ public final class Engine : Thread
                 {
                     /* Get the source address */
                     byte[16] srcAddr6 = poes[8..24];
+                    gprintln("Source: "~to!(string)(srcAddr6));
 
                     /* Get the destination address */
                     byte[16] dstAddr6 = poes[24..40];
+                    gprintln("Destination: "~to!(string)(dstAddr6));
+
+                    /* TODO: Use this to then lookup the correct hash thingy and route to it */
                 }
                 /* Disregard anything else */
                 else
