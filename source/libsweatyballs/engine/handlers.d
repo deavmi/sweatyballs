@@ -144,8 +144,9 @@ public void pktHandler(LinkUnit unit)
         import std.string : cmp;
 
         /* TODO: Make sure decryotion passes, maybe add a PayloadBytes thing to use that */
-        ubyte[] decryptedPayload = RSA.decrypt(engine.getRouter().getIdentity().getKeys().privateKey, packet.payload);
-        gprintln("Payload (decrypted): "~cast(string)(decryptedPayload));
+        /* TODO: Remove this from here, place in `processPacket` */
+        ubyte[] decryptejdPayload = RSA.decrypt(engine.getRouter().getIdentity().getKeys().privateKey, packet.payload);
+        gprintln("Payload (decrypted): "~cast(string)(decryptejdPayload));
 
         /* Now see if it is destined to us */
 
