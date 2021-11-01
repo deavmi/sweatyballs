@@ -211,6 +211,24 @@ public final class Table
         return match;
     }
 
+    public Route lookup_hash(string hashDigest)
+    {
+        /* The matched route (if any) */
+        Route match;
+
+        /* Add the route (only if it doesn't already exist) */
+        foreach(Route route; routes)
+        {
+            /* FIXME: Make sure nexthop matches as well */
+            if(cmp(route.getAddressHash(), hashDigest) == 0)
+            {
+                match = route;
+            }
+        }
+
+        return match;
+    }
+
     /**
     * Remove a route 
     */
