@@ -216,7 +216,7 @@ public final class Engine : Thread
     */
     private void processPacket(Packet packet)
     {
-
+        /* TODO: Attempt decrypt here */
     }
 
 
