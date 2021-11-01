@@ -19,4 +19,3 @@ To-do list
     - [ ] End-to-end
         - [x] Encryption and decryption
         - [ ] Sessions - _use AES_
-    - [ ] Link encryption
