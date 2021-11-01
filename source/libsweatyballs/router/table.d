@@ -55,8 +55,9 @@ public final class Route
 
         this.creationTime = creationTime;
 
-        /* Compute the address's hash */
-        addressHash = toHexString(sha512Of(address));
+        /* Compute the address's hash (only use first 16 bytes (128 bits)) */
+        ubyte[] hash = sha512Of(address)[0..16];
+        addressHash = toHexString(hash);
     }
 
     public void updateCreationTime(SysTime creationTime)
