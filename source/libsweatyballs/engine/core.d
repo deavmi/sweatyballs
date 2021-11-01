@@ -263,6 +263,19 @@ public final class Engine : Thread
                     gprintln("Destination: "~to!(string)(dstAddr6));
 
                     /* TODO: Use this to then lookup the correct hash thingy and route to it */
+                    import std.digest : toHexString;
+                    string hash16Bytes = toHexString(cast(ubyte[])dstAddr6);
+                    Route matchedTo = router.getTable().lookup_hash(hash16Bytes);
+
+                    if(matchedTo)
+                    {
+                        gprintln("MatchedTo: "~matchedTo.toString());
+                    }
+                    /* If no route was found */
+                    else
+                    {
+                        gprintln("No route found", DebugType.WARNING);
+                    }
                 }
                 /* Disregard anything else */
                 else
